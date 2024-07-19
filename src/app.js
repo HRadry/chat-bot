@@ -11,8 +11,6 @@ const port = process.env.PORT || 3000;
 
 // Middleware para analisar JSON
 app.use(express.json());
-// Middleware para CSP
-app.use(cspMiddleware);
 
 // Rotas
 app.use('/webhook', webhookRoutes);
