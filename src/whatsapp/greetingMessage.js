@@ -1,10 +1,13 @@
 const axios = require('axios');
+const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importa a função de formatação
 
 const sendGreetingMessage = async (phoneNumber) => {
+  const formattedPhoneNumber = formatPhoneNumber(phoneNumber); // Formata o número
+
   const data = {
     messaging_product: 'whatsapp',
     recipient_type: 'individual',
-    to: phoneNumber,
+    to: formattedPhoneNumber, // Usa o número formatado
     type: 'interactive',
     interactive: {
       type: 'button',
