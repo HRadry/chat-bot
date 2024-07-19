@@ -1,46 +1,40 @@
-const sendGreetingMessage = require('../whatsapp/greetingMessage');
+// src/controllers/webhookController.js
+const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
+const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const sendSupportMessage = require('../whatsapp/sendSupportMessage');
-//const sendSalesMessage = require('../whatsapp/sendSalesMessage'); // Suponha que você criará funções similares para Vendas
-//const sendAppointmentsMessage = require('../whatsapp/sendAppointmentsMessage'); // Suponha que você criará funções similares para Agendamentos
 
 const handleWebhook = async (req, res) => {
+  const { phoneNumber, text } = req.processedData;
+
+  console.log('Dados recebidos pelo controlador:');
+  console.log(`Número: ${phoneNumber}`);
+  console.log(`Texto original: ${text}`);
+
+  const normalizedText = text.trim().toLowerCase();
+  console.log('Texto normalizado:', normalizedText);
+
   try {
-    const { phoneNumber, text } = req.processedData;
+    if (normalizedText === 'olá') {
+      console.log('Texto reconhecido como saudação');
 
-    if (text) {
-      const normalizedText = text.toLowerCase().trim();
-      
-      if (normalizedText === 'suporte') {
-        // Enviar mensagem de suporte
-        await sendSupportMessage(phoneNumber);
-      } else if (normalizedText === 'sendas') {
-        // Enviar mensagem de vendas
-        await sendSalesMessage(phoneNumber);
-      } else if (normalizedText === 'agendamentos') {
-        // Enviar mensagem de agendamentos
-        await sendAppointmentsMessage(phoneNumber);
-      } else if (normalizedText === 'sair') {
-        // Lógica para quando o usuário escolher "Sair" (opcional)
-      } else if (normalizedText === 'ola') {
-        // Enviar mensagem de saudação
-        await sendGreetingMessage(phoneNumber);
+      // Enviar mensagem de saudação
+      await sendGreetingMessage(phoneNumber);
 
-        // Enviar menu principal após a saudação
-        await sendMenuPrincipal(phoneNumber);
-      } else {
-        // Caso o texto não corresponda a nenhum dos casos
-        console.log('Texto não reconhecido:', text);
-      }
+      // Enviar menu principal após a saudação
+      await sendMenuPrincipal(phoneNumber);
+    } else if (normalizedText === 'suporte') {
+      console.log('Texto reconhecido como suporte');
+
+      // Enviar mensagem de suporte
+      await sendSupportMessage(phoneNumber);
     } else {
-      // Se o texto estiver vazio, você pode tratar como uma situação especial, se necessário
-      console.log('Nenhum texto recebido.');
+      console.log('Texto não reconhecido:', text);
     }
-
-    res.sendStatus(200);
   } catch (error) {
-    console.error('Erro ao processar o webhook:', error);
-    res.sendStatus(500); // Internal Server Error
+    console.error('Erro ao processar o webhook:', error.message);
   }
+
+  res.sendStatus(200);
 };
 
-module.exports = { handleWebhook };
+module.exports = handleWebhook;
