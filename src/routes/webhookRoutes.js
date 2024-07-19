@@ -6,7 +6,7 @@ const verificationController = require('../controllers/verificationController');
 const webhookLogger = require('../middleware/webhookLogger'); // Importa o middleware
 
 // Rota para processar os webhooks
-router.post('/', webhookLogger, webhookController.handleWebhook);
+router.post('/', webhookLogger, webhookController);
 
 // Rota para verificação do webhook
 router.get('/', verificationController.verifyWebhook);
