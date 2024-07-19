@@ -49,7 +49,7 @@ const sendGreetingMessage = async (phoneNumber) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`
+          Authorization: `Bearer ${process.env.GRAPH_API_TOKEN}`
         }
       }
     );
