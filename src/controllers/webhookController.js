@@ -1,39 +1,40 @@
-exports.handleWebhook = (req, res) => {
-    const body = req.body;
+const sendMessage = require('../whatsapp/sendMessage'); // Certifique-se de que o caminho está correto
 
-    // Verifique se o webhook é de uma conta de negócios do WhatsApp
-    if (body.object === "whatsapp_business_account") {
-        console.log('Webhook received:', JSON.stringify(body, null, 2));
+const handleWebhook = async (req, res) => {
+    try {
+        const { entry } = req.body;
 
-        // Itere sobre as entradas
-        body.entry.forEach(function(entry) {
-            // Itere sobre as mudanças
-            entry.changes.forEach(function(change) {
-                if (change.field === "messages") {
-                    const value = change.value;
+        if (!entry || entry.length === 0) {
+            return res.status(400).send('No entry found');
+        }
 
-                    // Verifique se é uma mensagem recebida ou uma notificação de status
-                    if (value.messages) {
-                        // Mensagens recebidas
-                        value.messages.forEach(function(message) {
-                            console.log("Mensagem recebida:", message);
-                            // Adicione a lógica de processamento da mensagem aqui
-                        });
-                    } else if (value.statuses) {
-                        // Notificações de status
-                        value.statuses.forEach(function(status) {
-                            console.log("Notificação de status:", status);
-                            // Adicione a lógica de processamento do status aqui
-                        });
-                    }
-                }
-            });
-        });
+        const { changes } = entry[0];
+        if (!changes || changes.length === 0) {
+            return res.status(400).send('No changes found');
+        }
 
-        // Responda com 200 OK para confirmar o recebimento
-        res.status(200).send("EVENT_RECEIVED");
-    } else {
-        // Responda com 404 Not Found se o evento não for de uma conta de negócios do WhatsApp
-        res.sendStatus(404);
+        const { value } = changes[0];
+        const { messages } = value;
+
+        if (!messages || messages.length === 0) {
+            return res.status(400).send('No messages found');
+        }
+
+        const message = messages[0];
+        const { from } = message; // Pega o ID do remetente
+
+        console.log(`Mensagem recebida de ${from}`);
+
+        // Enviar uma resposta automática
+        await sendMessage(from, 'Olá! Esta é uma resposta automática.');
+
+        return res.status(200).send('Event received');
+    } catch (error) {
+        console.error('Erro ao processar o webhook:', error);
+        return res.status(500).send('Internal Server Error');
     }
+};
+
+module.exports = {
+    handleWebhook,
 };

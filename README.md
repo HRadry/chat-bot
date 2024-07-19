@@ -15,4 +15,3 @@ webhook-serve-heroku/
 ├── .gitignore
 ├── .env
 ├── package.json
-└── Procfile

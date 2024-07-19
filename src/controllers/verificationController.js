@@ -7,7 +7,7 @@ exports.verifyWebhook = (req, res) => {
     // Verifique se o modo e o token estão presentes na query string
     if (token) {
         // Verifique se o modo e o token são os esperados
-        if (token === process.env.VERIFY_TOKEN) {
+        if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
             // Responda com o token de desafio da solicitação
             console.log("WEBHOOK_VERIFIED");
             res.status(200).send(challenge);
