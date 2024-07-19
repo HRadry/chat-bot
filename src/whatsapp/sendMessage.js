@@ -1,8 +1,7 @@
-// src/Whatsapp/resendMessage.js
+// src/Whatsapp/sendMessage.js
 const axios = require('axios');
-const { formatPhoneNumber } = require('../utils/phoneUtils'); // Atualize o caminho conforme necessário
+const { formatPhoneNumber } = require('../utils/phoneUtils');
 
-// Função para enviar uma mensagem através da API do WhatsApp
 async function sendMessage(to, message) {
     const accessToken = process.env.GRAPH_API_TOKEN;
     const phoneNumberId = process.env.PHONE_NUMBER_ID;

@@ -1,40 +1,20 @@
-const sendMessage = require('../whatsapp/sendMessage'); // Certifique-se de que o caminho está correto
+// src/controllers/webhookController.js
+const { sendMessage } = require('../whatsapp/sendMessage');
 
-const handleWebhook = async (req, res) => {
+const handleWebhook = (req, res) => {
     try {
-        const { entry } = req.body;
+        const webhookEvent = req.body.entry[0].changes[0].value;
+        const from = webhookEvent.contacts[0].wa_id;
+        const messageBody = webhookEvent.messages[0].text.body;
 
-        if (!entry || entry.length === 0) {
-            return res.status(400).send('No entry found');
-        }
+        // Enviar resposta automática
+        sendMessage(from, 'Olá! Esta é uma resposta automática.');
 
-        const { changes } = entry[0];
-        if (!changes || changes.length === 0) {
-            return res.status(400).send('No changes found');
-        }
-
-        const { value } = changes[0];
-        const { messages } = value;
-
-        if (!messages || messages.length === 0) {
-            return res.status(400).send('No messages found');
-        }
-
-        const message = messages[0];
-        const { from } = message; // Pega o ID do remetente
-
-        console.log(`Mensagem recebida de ${from}`);
-
-        // Enviar uma resposta automática
-        await sendMessage(from, 'Olá! Esta é uma resposta automática.');
-
-        return res.status(200).send('Event received');
+        res.status(200).send('EVENT_RECEIVED');
     } catch (error) {
         console.error('Erro ao processar o webhook:', error);
-        return res.status(500).send('Internal Server Error');
+        res.sendStatus(500);
     }
 };
 
-module.exports = {
-    handleWebhook,
-};
+module.exports = { handleWebhook };
