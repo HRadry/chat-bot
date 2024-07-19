@@ -2,17 +2,17 @@
 const axios = require('axios');
 
 const sendMessage = async (phoneNumber, messageData) => {
-  const { type, ...data } = messageData;
+  // Prepare the data object for the API request
+  const data = {
+    to: phoneNumber,
+    ...messageData
+  };
 
   try {
+    // Make the POST request to the WhatsApp API
     await axios.post(
       `https://graph.facebook.com/v19.0/${process.env.PHONE_NUMBER_ID}/messages`,
-      {
-        messaging_product: 'whatsapp',
-        to: phoneNumber,
-        type,
-        ...data
-      },
+      data,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ const sendMessage = async (phoneNumber, messageData) => {
         }
       }
     );
-    console.log(`Message sent: ${JSON.stringify(messageData)}`);
+    console.log('Message sent:', data);
   } catch (error) {
     console.error('Error sending message:', error.response ? error.response.data : error.message);
   }
