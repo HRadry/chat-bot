@@ -44,4 +44,4 @@ const handleWebhook = async (req, res) => {
   res.sendStatus(200); // Enviar resposta HTTP 200 OK
 };
 
-module.exports = handleWebhook;
+module.exports = { handleWebhook }; // Modificação aqui
