@@ -21,7 +21,7 @@ const handleWebhook = async (req, res) => {
         await sendAppointmentsMessage(phoneNumber);
       } else if (normalizedText === 'Sair') {
         // Lógica para quando o usuário escolher "Sair" (opcional)
-      } else if (normalizedText === 'Olá') {
+      } else if (normalizedText === ' Olá') {
         // Enviar mensagem de saudação
         await sendGreetingMessage(phoneNumber);
 
