@@ -1,4 +1,4 @@
-const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
+const sendGreetingMessage = require('../whatsapp/greetingMessage');
 const { getConversation, hasConversationExpired, updateConversation } = require('../utils/conversationManager');
 
 const handleWebhook = (req, res) => {
