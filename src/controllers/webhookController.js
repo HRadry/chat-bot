@@ -10,18 +10,18 @@ const handleWebhook = async (req, res) => {
     if (text) {
       const normalizedText = text.toLowerCase().trim();
       
-      if (normalizedText === 'Suporte') {
+      if (normalizedText === 'suporte') {
         // Enviar mensagem de suporte
         await sendSupportMessage(phoneNumber);
-      } else if (normalizedText === 'Vendas') {
+      } else if (normalizedText === 'sendas') {
         // Enviar mensagem de vendas
         await sendSalesMessage(phoneNumber);
-      } else if (normalizedText === 'Agendamentos') {
+      } else if (normalizedText === 'agendamentos') {
         // Enviar mensagem de agendamentos
         await sendAppointmentsMessage(phoneNumber);
-      } else if (normalizedText === 'Sair') {
+      } else if (normalizedText === 'sair') {
         // Lógica para quando o usuário escolher "Sair" (opcional)
-      } else if (normalizedText === ' Olá') {
+      } else if (normalizedText === 'ola') {
         // Enviar mensagem de saudação
         await sendGreetingMessage(phoneNumber);
 
