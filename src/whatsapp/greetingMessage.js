@@ -1,62 +1,15 @@
-const axios = require('axios');
-const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importa a função de formatação
+const sendMessage = require('../utils/messageSender');
 
 const sendGreetingMessage = async (phoneNumber) => {
-  const formattedPhoneNumber = formatPhoneNumber(phoneNumber); // Formata o número
-
-  const data = {
-    messaging_product: 'whatsapp',
-    recipient_type: 'individual',
-    to: formattedPhoneNumber, // Usa o número formatado
-    type: 'interactive',
-    interactive: {
-      type: 'button',
-      body: {
-        text: 'Bem-vindo ao Ponto Rápido! Como podemos te ajudar hoje?'
-      },
-      action: {
-        buttons: [
-          {
-            type: 'reply',
-            reply: {
-              id: 'sales',
-              title: 'Vendas'
-            }
-          },
-          {
-            type: 'reply',
-            reply: {
-              id: 'support',
-              title: 'Suporte'
-            }
-          },
-          {
-            type: 'reply',
-            reply: {
-              id: 'appointments',
-              title: 'Agendamentos'
-            }
-          }
-        ]
-      }
+  const greetingData = {
+    type: 'image',
+    image: {
+      link: 'https://example.com/welcome-image.jpg', // Substitua pelo URL da sua imagem
+      caption: 'Olá, Seja bem-vindo ao Ponto Rápido! Sou sua assistente virtual, Kellynguiça. Estou aqui para te ajudar.'
     }
   };
 
-  try {
-    const response = await axios.post(
-      `https://graph.facebook.com/v19.0/${process.env.PHONE_NUMBER_ID}/messages`,
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.GRAPH_API_TOKEN}`
-        }
-      }
-    );
-    console.log('Greeting message sent:', response.data);
-  } catch (error) {
-    console.error('Error sending greeting message:', error.response ? error.response.data : error.message);
-  }
+  await sendMessage(phoneNumber, greetingData);
 };
 
 module.exports = sendGreetingMessage;
