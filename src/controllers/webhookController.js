@@ -1,5 +1,5 @@
 // src/controllers/webhookController.js
-const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
+const sendGreetingMessage = require('../whatsapp/greetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const sendSupportMessage = require('../whatsapp/sendSupportMessage');
 
