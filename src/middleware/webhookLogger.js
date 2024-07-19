@@ -18,21 +18,21 @@ const webhookLogger = (req, res, next) => {
       return next();
     }
 
-    // Attach processed data to the request object
+    // Definir os dados processados no objeto de requisição
     req.processedData = {
       phoneNumber: message.from || 'N/A',
       text: message.text && message.text.body || 'N/A',
       timestamp: new Date().toISOString()
     };
 
-    // Log the received message details
+    // Logar detalhes da mensagem recebida
     console.log('Received webhook message:');
     console.log(`Nome: ${req.processedData.phoneNumber}`);
     console.log(`Número: ${req.processedData.phoneNumber}`);
     console.log(`Mensagem: ${req.processedData.text}`);
     console.log(`Data: ${req.processedData.timestamp}`);
 
-    // Proceed to the next middleware or route handler
+    // Prosseguir para o próximo middleware ou manipulador de rota
     next();
   } catch (error) {
     console.error('Error processing webhook:', error);

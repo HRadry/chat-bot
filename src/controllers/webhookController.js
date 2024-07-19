@@ -1,19 +1,12 @@
 const sendGreetingMessage = require('../whatsapp/greetingMessage');
-const { getConversation, hasConversationExpired, updateConversation } = require('../utils/conversationManager');
 
 const handleWebhook = (req, res) => {
   try {
     const { phoneNumber, text } = req.processedData;
 
-    // Lógica de negócios: Verificar se o usuário já foi saudado ou se a conversa expirou
+    // Lógica de negócios: Enviar a mensagem de saudação
     if (text) {
-      const conversation = getConversation(phoneNumber);
-
-      if (hasConversationExpired(phoneNumber) || !conversation.greeted) {
-        // Enviar mensagem de saudação
-        sendGreetingMessage(phoneNumber);
-        updateConversation(phoneNumber, { greeted: true });
-      }
+      sendGreetingMessage(phoneNumber);
     }
 
     res.sendStatus(200);
