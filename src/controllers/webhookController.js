@@ -1,20 +1,21 @@
-// src/controllers/webhookController.js
-const { sendMessage } = require('../whatsapp/sendMessage');
+const sendGreetingMessage = require('../whatsapp/greetingMessage');
 
 const handleWebhook = (req, res) => {
-    try {
-        const webhookEvent = req.body.entry[0].changes[0].value;
-        const from = webhookEvent.contacts[0].wa_id;
-        const messageBody = webhookEvent.messages[0].text.body;
+  try {
+    const changes = req.body.entry[0].changes[0];
+    const message = changes.value.messages[0];
+    const phoneNumber = message.from;
 
-        // Enviar resposta automática
-        sendMessage(from, 'Olá! Esta é uma resposta automática.');
-
-        res.status(200).send('EVENT_RECEIVED');
-    } catch (error) {
-        console.error('Erro ao processar o webhook:', error);
-        res.sendStatus(500);
+    if (message.text && message.text.body) {
+      // Enviar mensagem de saudação
+      sendGreetingMessage(phoneNumber);
     }
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Erro ao processar o webhook:', error);
+    res.sendStatus(500);
+  }
 };
 
 module.exports = { handleWebhook };
