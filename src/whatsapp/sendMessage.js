@@ -6,7 +6,7 @@ async function sendMessage(to, message) {
     const accessToken = process.env.GRAPH_API_TOKEN;
     const phoneNumberId = process.env.PHONE_NUMBER_ID;
     const formattedPhoneNumber = formatPhoneNumber(to);
-
+    console.log(`Enviando mensagem para o número formatado: ${formattedPhoneNumber}`);
     try {
         const response = await axios.post(
             `https://graph.facebook.com/v19.0/${phoneNumberId}/messages`,
