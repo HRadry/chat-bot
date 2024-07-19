@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cspMiddleware = require('./middleware/cspMiddleware'); // Sem extensão
 const webhookRoutes = require('./routes/webhookRoutes');
 
 // Load environment variables
