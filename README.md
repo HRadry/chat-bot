@@ -6,13 +6,19 @@ webhook-serve-Railway
 │   │   ├── webhookController.js
 │   │   └── verificationController.js
 │   ├── middleware/
-│   │   └── cspMiddleware.js
+│   │   └── webhookLogger.js
 │   ├── routes/
 │   │   └── webhookRoutes.js
 │   ├── utils/
 │   │   └── phoneUtils.js
+│   │   └──messageSender.js
 │   └── Whatsapp/
-│       └── sendMessage.js
+│       └── sendAppointmentsMessage.js
+│       └──sendExitMessage.js
+│       └──sendGreetingMessage.js
+│       └──sendMenuPrincipal.js
+│       └──sendSalesMessage.js
+│       └──sendSupportMessage.js
 ├── .gitignore
 ├── .env
 ├── package.json
