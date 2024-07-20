@@ -24,14 +24,6 @@ const webhookLogger = (req, res, next) => {
       text: message.text && message.text.body || 'N/A',
       timestamp: new Date().toISOString()
     };
-    // Logar detalhes da mensagem recebida
-/*  console.log('Received webhook message:');
-    console.log(`Nome: ${req.processedData.phoneNumber}`);
-    console.log(`Número: ${req.processedData.phoneNumber}`);
-    console.log(`Mensagem: ${req.processedData.text}`);
-    console.log(`Data: ${req.processedData.timestamp}`); */
-
-    // Prosseguir para o próximo middleware ou manipulador de rota
     next();
   } catch (error) {
     console.error('Error processing webhook:', error);

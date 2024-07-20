@@ -13,7 +13,6 @@ webhook-serve-Railway
 │   │   └── phoneUtils.js
 │   │   └──messageSender.js
 │   └── Whatsapp/
-│       └── sendAppointmentsMessage.js
 │       └──sendExitMessage.js
 │       └──sendGreetingMessage.js
 │       └──sendMenuPrincipal.js
