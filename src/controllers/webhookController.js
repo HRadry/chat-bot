@@ -5,9 +5,11 @@ const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const sendSupportMessage = require('../whatsapp/sendSupportMessage'); // Importa a função para enviar mensagens de suporte
+const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importa a função de formatação
 
 const handleWebhook = async (req, res) => {
   const { phoneNumber, text } = req.processedData;
+  const formattedPhoneNumber = formatPhoneNumber(phoneNumber); // Formata o número de telefone
 
   if (text) {
     const normalizedText = text.toLowerCase().trim();
@@ -15,22 +17,22 @@ const handleWebhook = async (req, res) => {
     try {
       if (normalizedText === 'vendas') {
         // Enviar mensagem de vendas
-        await sendSalesMessage(phoneNumber);
+        await sendSalesMessage(formattedPhoneNumber);
       } else if (normalizedText === 'agendamentos') {
         // Enviar mensagem de agendamentos
-        await sendAppointmentsMessage(phoneNumber);
+        await sendAppointmentsMessage(formattedPhoneNumber);
       } else if (normalizedText === 'sair') {
         // Enviar mensagem de saída
-        await sendExitMessage(phoneNumber);
+        await sendExitMessage(formattedPhoneNumber);
         // Enviar menu principal após a saudação
-        await sendMenuPrincipal(phoneNumber);
+        await sendMenuPrincipal(formattedPhoneNumber);
       } else if (normalizedText === 'suporte') {
         // Enviar mensagem de suporte
-        await sendSupportMessage(phoneNumber);
+        await sendSupportMessage(formattedPhoneNumber);
       } else {
         // Se o texto não corresponde a nenhum comando, envia a saudação e o menu principal
-        await sendGreetingMessage(phoneNumber);
-        await sendMenuPrincipal(phoneNumber);
+        await sendGreetingMessage(formattedPhoneNumber);
+        await sendMenuPrincipal(formattedPhoneNumber);
       }
     } catch (error) {
       console.error('Error handling webhook:', error);
