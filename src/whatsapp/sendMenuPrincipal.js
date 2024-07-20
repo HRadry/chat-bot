@@ -1,6 +1,11 @@
 const sendMessage = require('../utils/messageSender');
+const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importe a função de formatação
+
 
 const sendMenuPrincipal = async (phoneNumber) => {
+    // Formate o número de telefone
+    const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+
   const menuData = {
     messaging_product: 'whatsapp', // Adicione o parâmetro messaging_product
     to: phoneNumber, // Adicione o número de telefone como parâmetro
@@ -38,7 +43,7 @@ const sendMenuPrincipal = async (phoneNumber) => {
     }
   };
 
-  await sendMessage(phoneNumber, menuData);
+  await sendMessage(formattedPhoneNumber, menuData);
 };
 
 module.exports = sendMenuPrincipal;
