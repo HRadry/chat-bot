@@ -21,7 +21,7 @@ const sendMessage = async (phoneNumber, messageData) => {
         }
       }
     );
-    console.log('Message sent:', data);
+    //console.log('Message sent:', data);
   } catch (error) {
     console.error('Error sending message:', error.response ? error.response.data : error.message);
   }

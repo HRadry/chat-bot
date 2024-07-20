@@ -15,6 +15,7 @@ const sendGreetingMessage = async (phoneNumber) => {
   };
 
   await sendMessage(phoneNumber, greetingData);
+  console.log(`Greeting message sent to ${phoneNumber}`);
 };
 
 module.exports = sendGreetingMessage;

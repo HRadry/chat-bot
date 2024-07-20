@@ -44,6 +44,7 @@ const sendMenuPrincipal = async (phoneNumber) => {
   };
 
   await sendMessage(formattedPhoneNumber, menuData);
+  console.log(`Menu principal enviado para ${formattedPhoneNumber}`);
 };
 
 module.exports = sendMenuPrincipal;
