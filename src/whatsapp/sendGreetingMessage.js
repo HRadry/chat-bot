@@ -1,9 +1,9 @@
 const sendMessage = require('../utils/messageSender');
-const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importe a função de formatação
+//const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importe a função de formatação
 
 const sendGreetingMessage = async (phoneNumber) => {
   // Formate o número de telefone
-  const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+  //const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
   const greetingData = {
     messaging_product: 'whatsapp',
@@ -14,7 +14,7 @@ const sendGreetingMessage = async (phoneNumber) => {
     }
   };
 
-  await sendMessage(formattedPhoneNumber, greetingData);
+  await sendMessage(phoneNumber, greetingData);
 };
 
 module.exports = sendGreetingMessage;
