@@ -24,7 +24,7 @@ const webhookLogger = (req, res, next) => {
       text: message.text && message.text.body || 'N/A',
       timestamp: new Date().toISOString()
     };
-    
+    console.log (req.processedData)
     // Logar detalhes da mensagem recebida
     console.log('Received webhook message:');
     console.log(`Nome: ${req.processedData.phoneNumber}`);
