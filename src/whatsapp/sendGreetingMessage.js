@@ -6,9 +6,10 @@ const sendGreetingMessage = async (phoneNumber) => {
   const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
   const greetingData = {
+    messaging_product: 'whatsapp',
     type: 'image',
     image: {
-      link: 'https://example.com/welcome-image.jpg', // Substitua pelo URL da sua imagem
+      link: 'https://github.com/juliuscxlopes/Wpp-Railways/blob/master/src/assets/istockphoto-460743571-1024x1024.jpg?raw=true', // Substitua pelo URL da sua imagem
       caption: 'Olá, Seja bem-vindo ao Ponto Rápido! Sou sua assistente virtual, Kellynguiça. Estou aqui para te ajudar.'
     }
   };
