@@ -2,19 +2,19 @@ const webhookLogger = (req, res, next) => {
   try {
     const entry = req.body.entry && req.body.entry[0];
     if (!entry) {
-      console.error('Webhook entry is missing');
+      //console.error('Webhook entry is missing');
       return next();
     }
 
     const changes = entry.changes && entry.changes[0];
     if (!changes) {
-      console.error('Webhook changes are missing');
+      //console.error('Webhook changes are missing');
       return next();
     }
 
     const message = changes.value.messages && changes.value.messages[0];
     if (!message) {
-      console.error('Message is missing');
+      //console.error('Message is missing');
       return next();
     }
 
