@@ -4,6 +4,7 @@ const axios = require('axios');
 const sendMessage = async (phoneNumber, messageData) => {
   // Prepare the data object for the API request
   const data = {
+    messaging_product: 'whatsapp',
     to: phoneNumber,
     ...messageData
   };

@@ -22,19 +22,15 @@ const handleWebhook = async (req, res) => {
       } else if (normalizedText === 'sair') {
         // Enviar mensagem de saída
         await sendExitMessage(phoneNumber);
-      } else if (normalizedText === 'ola') {
-        // Enviar mensagem de saudação
-        await sendGreetingMessage(phoneNumber);
         // Enviar menu principal após a saudação
         await sendMenuPrincipal(phoneNumber);
       } else if (normalizedText === 'suporte') {
         // Enviar mensagem de suporte
         await sendSupportMessage(phoneNumber);
       } else {
-        console.log('Texto não reconhecido:', text);
-        await sendGreetingMessage(phoneNumber); //teste
-        // Enviar menu principal após a saudação
-        await sendMenuPrincipal(phoneNumber);//teste
+        // Se o texto não corresponde a nenhum comando, envia a saudação e o menu principal
+        await sendGreetingMessage(phoneNumber);
+        await sendMenuPrincipal(phoneNumber);
       }
     } catch (error) {
       console.error('Error handling webhook:', error);
