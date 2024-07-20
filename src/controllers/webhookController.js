@@ -1,6 +1,5 @@
 // src/controllers/webhookController.js
 const sendSalesMessage = require('../whatsapp/sendSalesMessage');
-const sendAppointmentsMessage = require('../whatsapp/sendAppointmentsMessage');
 const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
@@ -18,9 +17,6 @@ const handleWebhook = async (req, res) => {
       if (normalizedText === 'vendas') {
         // Enviar mensagem de vendas
         await sendSalesMessage(formattedPhoneNumber);
-      } else if (normalizedText === 'agendamentos') {
-        // Enviar mensagem de agendamentos
-        await sendAppointmentsMessage(formattedPhoneNumber);
       } else if (normalizedText === 'sair') {
         // Enviar mensagem de saída
         await sendExitMessage(formattedPhoneNumber);

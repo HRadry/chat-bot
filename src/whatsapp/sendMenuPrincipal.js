@@ -29,13 +29,6 @@ const sendMenuPrincipal = async (phoneNumber) => {
           {
             type: 'reply',
             reply: {
-              id: 'appointments',
-              title: 'Agendamentos'
-            }
-          },
-          {
-            type: 'reply',
-            reply: {
               id: 'exit',
               title: 'Sair'
             }
