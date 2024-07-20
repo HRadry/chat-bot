@@ -2,6 +2,8 @@ const sendMessage = require('../utils/messageSender');
 
 const sendMenuPrincipal = async (phoneNumber) => {
   const menuData = {
+    messaging_product: 'whatsapp', // Adicione o parâmetro messaging_product
+    to: phoneNumber, // Adicione o número de telefone como parâmetro
     type: 'interactive',
     interactive: {
       type: 'button',
