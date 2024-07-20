@@ -1,4 +1,3 @@
-// src/controllers/webhookController.js
 const sendSalesMessage = require('../whatsapp/sendSalesMessage');
 const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
@@ -7,11 +6,11 @@ const sendSupportMessage = require('../whatsapp/sendSupportMessage'); // Importa
 const { formatPhoneNumber } = require('../utils/phoneUtils'); // Importa a função de formatação
 
 const handleWebhook = async (req, res) => {
-  const { phoneNumber, text } = req.processedData;
+  const { phoneNumber, text } = req.processedData; // Extrai phoneNumber e text de req.processedData
   const formattedPhoneNumber = formatPhoneNumber(phoneNumber); // Formata o número de telefone
 
-  if (text) {
-    const normalizedText = text.toLowerCase().trim();
+  if (text) { // Verifica se o texto está presente
+    const normalizedText = text.toLowerCase().trim(); // Normaliza o texto para facilitar a comparação
 
     try {
       if (normalizedText === 'vendas') {
@@ -31,11 +30,11 @@ const handleWebhook = async (req, res) => {
         await sendMenuPrincipal(formattedPhoneNumber);
       }
     } catch (error) {
-      console.error('Error handling webhook:', error);
+      console.error('Error handling webhook:', error); // Loga qualquer erro que ocorra durante o processo
     }
   }
 
-  res.sendStatus(200); // Enviar resposta HTTP 200 OK
+  res.sendStatus(200); // Envia resposta HTTP 200 OK
 };
 
-module.exports = { handleWebhook }; // Modificação aqui
+module.exports = { handleWebhook }; // Exporta o controlador
