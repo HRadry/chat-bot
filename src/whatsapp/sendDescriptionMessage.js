@@ -4,7 +4,7 @@ const sendSupportMessage = async (phoneNumber) => {
   const supportData = {
     type: 'text',
     text: {
-      body: 'Poxa, que pena que esta passando por problemas.. Vou abrir um chamado para você e conecta-lo com um especialista.. Um Momento.. '
+      body: 'Descreva seu problema de forma sucinta para anexarmos ao Chamado.'
     }
   };
 
