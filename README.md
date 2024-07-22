@@ -22,6 +22,8 @@ webhook-serve-Railway
 │       └──sendMenuPrincipal.js
 │       └──sendSalesMessage.js
 │       └──sendSupportMessage.js
+│       └──sendCNPJMessage
+│       └──sendEmailMessage
 ├── .gitignore
 ├── .env
 ├── package.json

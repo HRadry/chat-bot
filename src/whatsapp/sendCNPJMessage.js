@@ -12,3 +12,5 @@ const sendCNPJMessage = async (phoneNumber) => {
 };
 
 module.exports = sendCNPJMessage;
+
+

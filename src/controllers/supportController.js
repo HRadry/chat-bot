@@ -1,6 +1,8 @@
 // controllers/contactController.js
 const millDeskMiddleware = require('../middleware/milldeskMiddleware');
-const { sendGreetingMessage, sendEmailMessage, sendCNPJMessage } = require('../whatsapp');
+const sendGreetingMessage = require('../Whatsapp/sendGreetingMessage');
+const sendEmailMessage = require('../whatsapp/sendEmailMessage');
+const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 
 const processContactMessage = async (req, res, next) => {
   const { contact } = req.body;
