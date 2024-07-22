@@ -30,7 +30,7 @@ const handleWebhook = async (req, res) => {
         case 'support':  // ID do botão de suporte
           await sendSupportMessage(formattedPhoneNumber);
           // Adiciona um passo para iniciar o processo de coleta de informações
-          req.processedData.contact = { step: 'getCNPJ', phoneNumber: formattedPhoneNumber };
+          //req.processedData.contact = { step: 'getCNPJ', phoneNumber: formattedPhoneNumber };
           await processContactMessage(req, res, () => {}); // Chama o controlador para processar a mensagem
           break;
         default:
