@@ -1,6 +1,6 @@
 // controllers/contactController.js
 const millDeskMiddleware = require('../middleware/milldeskMiddleware');
-const sendGreetingMessage = require('../Whatsapp/sendGreetingMessage');
+const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 
