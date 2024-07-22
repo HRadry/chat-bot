@@ -6,29 +6,35 @@ const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage'); // Novo arquivo para mensagem de descrição
 
 const processContactMessage = async (req, res, next) => {
-  const { contact } = req.processedData;
-  const { normalizedText, formattedPhoneNumber } = req.processedData;
+  const { contact } = req.processedData || {};
 
-  switch (contact.step) {
+  if (!contact) {
+    console.error('Contact object is not defined.');
+    return res.status(400).send('Contact object is missing.');
+  }
+
+  const { step, phoneNumber } = contact;
+  const { normalizedText } = req.processedData;
+
+  switch (step) {
     case 'getCNPJ':
       if (req.isValidCNPJ) {
         contact.cnpj = normalizedText;
-        // Solicita o e-mail após o CNPJ ser validado
-        await sendEmailMessage(formattedPhoneNumber);
+        await sendEmailMessage(phoneNumber);
         contact.step = 'getEmail';
       } else {
-        await sendCNPJMessage(formattedPhoneNumber); // Mensagem de erro ou repetição
+        await sendCNPJMessage(phoneNumber); // Mensagem de erro ou repetição
       }
       break;
 
     case 'getEmail':
       if (req.isValidEmail) {
         contact.email = normalizedText;
-        // Solicita a descrição do problema após o e-mail ser validado
-        await sendDescriptionMessage(formattedPhoneNumber);
         contact.step = 'getDescription';
+        // Envia mensagem solicitando a descrição do problema
+        await sendDescriptionMessage(phoneNumber);
       } else {
-        await sendEmailMessage(formattedPhoneNumber); // Mensagem de erro ou repetição
+        await sendEmailMessage(phoneNumber); // Mensagem de erro ou repetição
       }
       break;
 
@@ -37,13 +43,12 @@ const processContactMessage = async (req, res, next) => {
       // Cria o ticket no MillDesk usando o middleware
       await millDeskMiddleware({ body: { contact } }, {}, () => {});
       // Envia a mensagem de confirmação ao usuário
-      await sendConfirmationMessage(formattedPhoneNumber); // Novo arquivo para confirmação
-      // Limpa os dados ou define o próximo passo se houver mais etapas
-      delete contacts[formattedPhoneNumber];
+      await sendConfirmationMessage(phoneNumber);
+      delete req.processedData.contact; // Limpa os dados ou define o próximo passo
       break;
 
     default:
-      await sendGreetingMessage(formattedPhoneNumber); // Mensagem padrão
+      await sendGreetingMessage(phoneNumber); // Mensagem padrão
   }
 
   next();
