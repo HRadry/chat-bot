@@ -17,12 +17,26 @@ const messageProcessor = (req, res, next) => {
 
     const message = changes.value.messages && changes.value.messages[0];
     if (message) {
-      setProcessedData(req, {
-        type: 'message',
-        phoneNumber: message.from || 'N/A',
-        text: message.text && message.text.body || 'N/A',
-        timestamp: new Date().toISOString()
-      });
+      //Trata mensagens de Texto
+      if (message.type === 'text') {
+        setProcessedData(req, {
+          type: 'message',
+          phoneNumber: message.from || 'N/A',
+          text: message.text && message.text.body ? message.text.body : 'N/A',
+          timestamp: new Date().toISOString()
+        });
+      } 
+      //trata Mensagens Interativas
+      else if (message.type === 'interactive' && message.interactive.type === 'button_reply') {
+        setProcessedData(req, {
+          type: 'message',
+          phoneNumber: message.from || 'N/A',
+          text: message.interactive.button_reply.id || 'N/A',
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.error('Message is missing or not of type text/button_reply in webhook changes');
+      }
     }
 
     next();

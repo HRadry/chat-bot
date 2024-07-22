@@ -17,12 +17,16 @@ const handleWebhook = async (req, res) => {
     try {
       switch (normalizedText) {
         case 'vendas':
+        case 'sales':  // ID do botão de vendas
           await sendSalesMessage(formattedPhoneNumber);
           break;
         case 'sair':
+        case 'exit':  // ID do botão de sair
           await sendExitMessage(formattedPhoneNumber);
+          await sendMenuPrincipal(formattedPhoneNumber);
           break;
         case 'suporte':
+        case 'support':  // ID do botão de suporte
           await sendSupportMessage(formattedPhoneNumber);
           break;
         default:
@@ -30,10 +34,14 @@ const handleWebhook = async (req, res) => {
           await sendMenuPrincipal(formattedPhoneNumber);
           break;
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error handling webhook:', error);
     }
-  } else if (type === 'status') {
+  
+  } 
+  
+  else if (type === 'status') {
     const { id, status } = req.processedData;
     console.log(`Message ID: ${id}, Status: ${status}`);
     // Adicione lógica para lidar com status de mensagens se necessário
