@@ -9,12 +9,8 @@ const contactValidationMiddleware = require('../middleware/contactValidationMidd
 const { processContactMessage } = require('../controllers/supportController');
 
 // Rota para processar os webhooks
-router.post('/', messageProcessor, statusProcessor, verificationMiddleware, contactValidationMiddleware, processContactMessage, handleWebhook);
+router.post('/', messageProcessor, statusProcessor, contactValidationMiddleware, processContactMessage, handleWebhook);
 
-
-
-// Rota para processar os webhooks
-router.post('/', messageProcessor, statusProcessor, verificationMiddleware, handleWebhook );
 
 // Rota para verificação do webhook
 router.get('/', verificationController.verifyWebhook);
