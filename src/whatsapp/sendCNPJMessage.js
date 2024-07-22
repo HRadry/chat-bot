@@ -9,6 +9,7 @@ const sendCNPJMessage = async (phoneNumber) => {
   };
 
   await sendMessage(phoneNumber, messageData);
+  console.log(`CNPJ message sent to ${phoneNumber}`);
 };
 
 module.exports = sendCNPJMessage;

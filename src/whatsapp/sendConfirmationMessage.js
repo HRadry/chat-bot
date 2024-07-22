@@ -9,6 +9,7 @@ const sendSupportMessage = async (phoneNumber) => {
   };
 
   await sendMessage(phoneNumber, supportData);
+  console.log(`confirmation message sent to ${phoneNumber}`);
 };
 
 module.exports = sendSupportMessage;

@@ -9,6 +9,7 @@ const sendEmailMessage = async (phoneNumber) => {
   };
 
   await sendMessage(phoneNumber, messageData);
+  console.log(`E-mail message sent to ${phoneNumber}`);
 };
 
 module.exports = sendEmailMessage;
