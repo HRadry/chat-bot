@@ -26,13 +26,12 @@ const handleWebhook = async (req, res) => {
           await sendExitMessage(formattedPhoneNumber);
           await sendMenuPrincipal(formattedPhoneNumber);
           break;
-        case 'suporte':
-        case 'support':  // ID do botão de suporte
-          await sendSupportMessage(formattedPhoneNumber);
-          // Adiciona um passo para iniciar o processo de coleta de informações
-          //req.processedData.contact = { step: 'getCNPJ', phoneNumber: formattedPhoneNumber };
-          await processContactMessage(req, res, () => {}); // Chama o controlador para processar a mensagem
-          break;
+          case 'suporte':
+            case 'support':  // ID do botão de suporte
+              req.processedData.contact = req.processedData.contact || {};
+              req.processedData.contact.step = req.processedData.contact.step || 'getCNPJ';
+              await processContactMessage(req, res, next); // Chama o controlador para processar a mensagem
+              break;
         default:
           await sendGreetingMessage(formattedPhoneNumber);
           await sendMenuPrincipal(formattedPhoneNumber);
@@ -42,9 +41,7 @@ const handleWebhook = async (req, res) => {
     catch (error) {
       console.error('Error handling webhook:', error);
     }
-  
   } 
-  
   else if (type === 'status') {
     const { id, status } = req.processedData;
     console.log(`Message ID: ${id}, Status: ${status}`);
