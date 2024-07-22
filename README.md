@@ -2,16 +2,20 @@ webhook-serve-Railway
 │
 ├── src/
 │   ├── app.js
+│   ├── assets
+│   │   ├── istockphoto-460743571-1024x1024.jpg
 │   ├── controllers/
 │   │   ├── webhookController.js
 │   │   └── verificationController.js
 │   ├── middleware/
-│   │   └── webhookLogger.js
+│   │   └── messageProcessor.js
+│   │   └── statusProcessor.js
 │   ├── routes/
 │   │   └── webhookRoutes.js
 │   ├── utils/
 │   │   └── phoneUtils.js
 │   │   └──messageSender.js
+│   │   └── processWebhookData.js
 │   └── Whatsapp/
 │       └──sendExitMessage.js
 │       └──sendGreetingMessage.js

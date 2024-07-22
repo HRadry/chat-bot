@@ -15,16 +15,20 @@ const handleWebhook = async (req, res) => {
     const normalizedText = text.toLowerCase().trim();
 
     try {
-      if (normalizedText === 'vendas') {
-        await sendSalesMessage(formattedPhoneNumber);
-      } else if (normalizedText === 'sair') {
-        await sendExitMessage(formattedPhoneNumber);
-        await sendMenuPrincipal(formattedPhoneNumber);
-      } else if (normalizedText === 'suporte') {
-        await sendSupportMessage(formattedPhoneNumber);
-      } else {
-        await sendGreetingMessage(formattedPhoneNumber);
-        await sendMenuPrincipal(formattedPhoneNumber);
+      switch (normalizedText) {
+        case 'vendas':
+          await sendSalesMessage(formattedPhoneNumber);
+          break;
+        case 'sair':
+          await sendExitMessage(formattedPhoneNumber);
+          break;
+        case 'suporte':
+          await sendSupportMessage(formattedPhoneNumber);
+          break;
+        default:
+          await sendGreetingMessage(formattedPhoneNumber);
+          await sendMenuPrincipal(formattedPhoneNumber);
+          break;
       }
     } catch (error) {
       console.error('Error handling webhook:', error);
