@@ -1,5 +1,8 @@
 // controllers/supportController.js
-const sendSupportRequestMessage = require('../whatsapp/sendSupportMessage');
+const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
+const sendEmailMessage = require('../whatsapp/sendEmailMessage');
+const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage');
+const sendConfirmationMessage = require('../whatsapp/sendConfirmationMessage')
 
 const processContactMessage = async (req, res, next) => {
   const { contact } = req.processedData;
@@ -11,23 +14,23 @@ const processContactMessage = async (req, res, next) => {
 
   switch (contact.step) {
     case 'getCNPJ':
-      await sendSupportRequestMessage(contact.phoneNumber, 'Por favor, envie seu CNPJ.');
+      await sendCNPJMessage(contact.phoneNumber);
       contact.step = 'awaitingCNPJ';
       break;
     case 'awaitingCNPJ':
       contact.cnpj = req.processedData.text;
       contact.step = 'getEmail';
-      await sendSupportRequestMessage(contact.phoneNumber, 'Por favor, envie seu email.');
+      await sendEmailMessage(contact.phoneNumber, 'Por favor, envie seu email.');
       break;
     case 'getEmail':
       contact.email = req.processedData.text;
       contact.step = 'getDescription';
-      await sendSupportRequestMessage(contact.phoneNumber, 'Por favor, descreva seu problema.');
+      await sendDescriptionMessage(contact.phoneNumber, 'Por favor, descreva seu problema.');
       break;
     case 'getDescription':
       contact.description = req.processedData.text;
       contact.step = 'completed';
-      await sendSupportRequestMessage(contact.phoneNumber, 'Obrigado! Seu pedido de suporte foi recebido.');
+      await sendConfirmationMessage(contact.phoneNumber, 'Obrigado! Seu pedido de suporte foi recebido.');
       break;
     default:
       console.error('Unknown step:', contact.step);
