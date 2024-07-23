@@ -6,7 +6,7 @@ const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 //const sendSupportMessage = require('../whatsapp/sendSupportMessage');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
-
+const { processContactMessage } = require('./supportController'); // Verifique o caminho
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
@@ -38,8 +38,10 @@ const handleWebhook = async (req, res, next) => {
           break;
       }
 
-      // Processa a mensagem do contato
-      await processContactMessage(req, res, next);
+      // Chama processContactMessage apenas quando o step é 'awaitCNPJ' ou 'awaitEMAIL'
+      if (contact.step === 'awaitCNPJ' || contact.step === 'awaitEMAIL') {
+        await processContactMessage(contact, normalizedText);
+      }
     } catch (error) {
       console.error('Error handling webhook:', error);
     }
