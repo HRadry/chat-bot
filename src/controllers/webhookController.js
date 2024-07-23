@@ -6,8 +6,10 @@ const sendEmailMessage = require('../whatsapp/sendEmailMessage');
 const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // Verifique o caminho
 const redis = require('../redisClient');
 const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage');
+const sendConfirmationMessage = require('../whatsapp/sendConfirmationMessage');
 
-const SUPPORT_EXPIRATION = 3600
+
+const SUPPORT_EXPIRATION = 60
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
