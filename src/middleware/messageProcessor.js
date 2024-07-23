@@ -15,39 +15,37 @@ const messageProcessor = (req, res, next) => {
       return next();
     }
 
-    const value = changes.value;
-    if (value) {
-      // Obtém as informações dos contatos
-      const contact = value.contacts && value.contacts[0];
-      const message = value.messages && value.messages[0];
-
-      // Inicializa ou atualiza o objeto contact
-      req.processedData.contact = req.processedData.contact || {
-        name: '', // O nome será preenchido posteriormente
-        phoneNumber: '', // Número de telefone formatado
-        whatsappId: '', // ID da conta WhatsApp
-        step: 'Saudacao' // Define o passo inicial como 'Saudacao'
+    const message = changes.value.messages && changes.value.messages[0];
+    if (message) {
+      const contacts = changes.value.contacts && changes.value.contacts[0];
+      const formattedPhoneNumber = message.from;
+      const name = contacts ? contacts.profile.name : 'N/A';
+      const whatsappId = contacts ? contacts.wa_id : 'N/A';
+      
+      const contact = {
+        name: name || '',
+        phoneNumber: formattedPhoneNumber || '',
+        whatsappId: whatsappId || '',
+        step: 'getCNPJ'
       };
 
-      if (contact) {
-        req.processedData.contact.name = contact.profile.name || '';
-        req.processedData.contact.phoneNumber = contact.wa_id || '';
-        req.processedData.contact.whatsappId = value.metadata.phone_number_id || '';
-      }
-
-      if (message) {
-        // Preenche o texto da mensagem e outras informações
+      if (message.type === 'text') {
         setProcessedData(req, {
           type: 'message',
-          phoneNumber: message.from || 'N/A',
+          contact: contact,
           text: message.text && message.text.body ? message.text.body : 'N/A',
           timestamp: new Date().toISOString()
         });
+      } else if (message.type === 'interactive' && message.interactive.type === 'button_reply') {
+        setProcessedData(req, {
+          type: 'message',
+          contact: contact,
+          text: message.interactive.button_reply.id || 'N/A',
+          timestamp: new Date().toISOString()
+        });
       } else {
-        console.error('Message is missing in webhook changes');
+        console.error('Message is missing or not of type text/button_reply in webhook changes');
       }
-    } else {
-      console.error('Value is missing in webhook changes');
     }
 
     next();

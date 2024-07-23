@@ -3,38 +3,34 @@ const sendSalesMessage = require('../whatsapp/sendSalesMessage');
 const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
-const sendSupportMessage = require('../whatsapp/sendSupportMessage');
-const { formatPhoneNumber } = require('../utils/phoneUtils');
 const { processContactMessage } = require('./supportController'); // Ajuste o caminho conforme necessário
 
-const handleWebhook = async (req, res) => {
+const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
 
   if (type === 'message') {
-    const { phoneNumber, text } = req.processedData;
-    const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+    const { contact, text } = req.processedData;
     const normalizedText = text.toLowerCase().trim();
 
     try {
       switch (normalizedText) {
         case 'vendas':
         case 'sales':  // ID do botão de vendas
-          await sendSalesMessage(formattedPhoneNumber);
+          await sendSalesMessage(contact.phoneNumber);
           break;
         case 'sair':
         case 'exit':  // ID do botão de sair
-          await sendExitMessage(formattedPhoneNumber);
-          await sendMenuPrincipal(formattedPhoneNumber);
+          await sendExitMessage(contact.phoneNumber);
+          await sendMenuPrincipal(contact.phoneNumber);
           break;
-          case 'suporte':
-            case 'support':  // ID do botão de suporte
-              req.processedData.contact = req.processedData.contact || {};
-              req.processedData.contact.step = req.processedData.contact.step || 'getCNPJ';
-              await processContactMessage(req, res, next); // Chama o controlador para processar a mensagem
-              break;
+        case 'suporte':
+        case 'support':  // ID do botão de suporte
+          contact.step = contact.step || 'getCNPJ';
+          await processContactMessage(req, res, next); // Chama o controlador para processar a mensagem
+          break;
         default:
-          await sendGreetingMessage(formattedPhoneNumber);
-          await sendMenuPrincipal(formattedPhoneNumber);
+          await sendGreetingMessage(contact.phoneNumber);
+          await sendMenuPrincipal(contact.phoneNumber);
           break;
       }
     } 
@@ -45,7 +41,6 @@ const handleWebhook = async (req, res) => {
   else if (type === 'status') {
     const { id, status } = req.processedData;
     console.log(`Message ID: ${id}, Status: ${status}`);
-    // Adicione lógica para lidar com status de mensagens se necessário
   }
 
   res.sendStatus(200);
