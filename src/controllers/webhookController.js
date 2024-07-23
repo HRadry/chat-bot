@@ -1,10 +1,12 @@
 // controllers/webhookController.js
-const sendSalesMessage = require('../whatsapp/sendSalesMessage');
-const sendExitMessage = require('../whatsapp/sendExitMessage');
+//const sendSalesMessage = require('../whatsapp/sendSalesMessage');
+//const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
-const { processContactMessage } = require('./supportController'); // Ajuste o caminho conforme necessário
-const sendSupportMessage = require ('../whatsapp/sendSupportMessage')
+//const sendSupportMessage = require('../whatsapp/sendSupportMessage');
+const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
+const sendEmailMessage = require('../whatsapp/sendEmailMessage');
+
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
@@ -13,39 +15,35 @@ const handleWebhook = async (req, res, next) => {
     const { contact, text } = req.processedData;
     const normalizedText = text.toLowerCase().trim();
 
-    // Adicionando log para verificar o contato
-    console.log('Contact:', contact);
-    console.log('Text:', text);
+    console.log('Received message:', { contact, text });
 
-    
     try {
-      switch (normalizedText) {
-        case 'vendas':
-        case 'sales':  // ID do botão de vendas
-          await sendSalesMessage(contact.phoneNumber);
+      switch (contact.step) {
+        case '':  // Se o step estiver vazio, inicia a conversa com a saudação
+          await sendGreetingMessage(contact.phoneNumber);
+          contact.step = 'getCNPJ';  // Define o próximo passo
           break;
-        case 'sair':
-        case 'exit':  // ID do botão de sair
-          await sendExitMessage(contact.phoneNumber);
-          await sendMenuPrincipal(contact.phoneNumber);
+        case 'getCNPJ':
+          await sendCNPJMessage(contact.phoneNumber);
+          contact.step = 'awaitCNPJ';  // Define o próximo passo
           break;
-        case 'suporte':
-        case 'support':  // ID do botão de suporte
-          await sendSupportMessage(contact.phoneNumber); // Adiciona aqui a chamada para mensagem de suporte
-          contact.step = contact.step || 'getCNPJ';
-          await processContactMessage(req, res, next); // Chama o controlador para processar a mensagem
+        case 'getEmail':
+          await sendEmailMessage(contact.phoneNumber);
+          contact.step = 'awaitEMAIL';  // Define o próximo passo
           break;
         default:
+          console.log('Default case for message handling');
           await sendGreetingMessage(contact.phoneNumber);
           await sendMenuPrincipal(contact.phoneNumber);
           break;
       }
-    } 
-    catch (error) {
+
+      // Processa a mensagem do contato
+      await processContactMessage(req, res, next);
+    } catch (error) {
       console.error('Error handling webhook:', error);
     }
-  } 
-  else if (type === 'status') {
+  } else if (type === 'status') {
     const { id, status } = req.processedData;
     console.log(`Message ID: ${id}, Status: ${status}`);
   }

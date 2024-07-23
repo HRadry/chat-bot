@@ -27,7 +27,7 @@ const messageProcessor = (req, res, next) => {
         name: name || '',
         phoneNumber: formattedPhoneNumber || '',
         whatsappId: whatsappId || '',
-        step: 'getCNPJ'
+        step: ''
       };
 
       if (message.type === 'text') {
