@@ -30,9 +30,6 @@ const messageProcessor = (req, res, next) => {
         step: 'getCNPJ'
       };
 
-      console.log('Contact:', contact);
-      console.log('Text:', text);
-
       if (message.type === 'text') {
         setProcessedData(req, {
           type: 'message',
@@ -50,6 +47,7 @@ const messageProcessor = (req, res, next) => {
       } else {
         console.error('Message is missing or not of type text/button_reply in webhook changes');
       }
+    
     }
 
     next();
