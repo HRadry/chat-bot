@@ -4,6 +4,7 @@ const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const { processContactMessage } = require('./supportController'); // Ajuste o caminho conforme necessário
+const sendSupportMessage = require ('../whatsapp/sendSupportMessage')
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
