@@ -1,4 +1,6 @@
 const axios = require('axios');
+require('dotenv').config();
+
 
 const createTicket = async (contact) => {
   const { issueDescription } = contact;
@@ -11,6 +13,7 @@ const createTicket = async (contact) => {
   try {
     const response = await axios.get(url);
     console.log('Ticket criado na MillDesk:', response.data);
+    console.log(email)
   } catch (error) {
     console.error('Erro ao criar ticket na MillDesk:', error);
   }
