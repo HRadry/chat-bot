@@ -24,7 +24,7 @@ const handleWebhook = async (req, res, next) => {
           await sendGreetingMessage(contact.phoneNumber);
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
-          await redis.set(contact.whatsappId, JSON.stringify(contact), SUPPORT_EXPIRATION)
+          await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX' ,SUPPORT_EXPIRATION)
           break;
         case 'awaitCNPJ':
           if (validateCNPJ(text)) {
@@ -32,7 +32,7 @@ const handleWebhook = async (req, res, next) => {
             console.log('CNPJ is valid:', contact.cnpj);
             await sendEmailMessage(contact.phoneNumber);
             contact.step = 'awaitEMAIL';
-            await redis.set(contact.whatsappId, JSON.stringify(contact), SUPPORT_EXPIRATION);
+            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION);
           } else {
             console.log('Invalid CNPJ:', text);
             // Enviar mensagem de erro ou instruções adicionais se necessário
@@ -45,7 +45,7 @@ const handleWebhook = async (req, res, next) => {
             await sendSupportMessage (contact.phoneNumber);
             await sendDescriptionMessage (contact.phoneNumber);
             contact.step = 'awaitSuport'; // Marca a conversa como completa
-            await redis.set(contact.whatsappId, JSON.stringify(contact), SUPPORT_EXPIRATION)
+            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION)
           } else {
               console.log('Invalid email:', text);
               // Enviar mensagem de erro ou instruções adicionais se necessário
