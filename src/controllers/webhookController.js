@@ -22,6 +22,7 @@ const handleWebhook = async (req, res, next) => {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
           await sendGreetingMessage(contact.phoneNumber);
           contact.step = 'getCNPJ';  // Define o próximo passo
+          console.log('Step updated to getCNPJ', contact.step);
           break;
         case 'getCNPJ':
           await sendCNPJMessage(contact.phoneNumber);
