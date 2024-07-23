@@ -8,9 +8,15 @@ const statusProcessor = require('../middleware/statusProcessor');
 const contactValidationMiddleware = require('../middleware/contactValidationMiddleware');
 
 
-// Middleware de processamento básico
-router.post('/', messageProcessor,contactValidationMiddleware, statusProcessor, handleWebhook);
-
+router.post('/', messageProcessor, statusProcessor, (req, res, next) => {
+    // Aplicar validação de CNPJ e e-mail apenas se o passo atual for relevante
+    if (req.processedData.contact.step === 'getCNPJ' || req.processedData.contact.step === 'getEmail') {
+      contactValidationMiddleware(req, res, next);
+    } else {
+      next();
+    }
+  }, handleWebhook);
+  
 // Rota para verificação do webhook
 router.get('/', verificationController.verifyWebhook);
 
