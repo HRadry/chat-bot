@@ -6,7 +6,7 @@ const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 //const sendSupportMessage = require('../whatsapp/sendSupportMessage');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
-const { processContactMessage } = require('./supportController'); // Verifique o caminho
+const { processContactMessage } = require('./controller'); // Verifique o caminho
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
