@@ -5,9 +5,19 @@ const contactValidationMiddleware = (req, res, next) => {
   const { normalizedText, contact } = req.processedData;
 
   if (contact.step === 'getCNPJ') {
-    req.isValidCNPJ = validateCNPJ(normalizedText);
+    if (validateCNPJ(normalizedText)) {
+      contact.cnpj = normalizedText;
+      req.isValidCNPJ = true;
+    } else {
+      req.isValidCNPJ = false;
+    }
   } else if (contact.step === 'getEmail') {
-    req.isValidEmail = validateEmail(normalizedText);
+    if (validateEmail(normalizedText)) {
+      contact.email = normalizedText;
+      req.isValidEmail = true;
+    } else {
+      req.isValidEmail = false;
+    }
   }
 
   next();
