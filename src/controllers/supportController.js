@@ -9,12 +9,14 @@ const processContactMessage = async (req, res, next) => {
 
   // Adicionando log para verificar o contato
   console.log('Processing contact:', contact);
+  console.log('Text:', text);
+
 
   if (!contact) {
     console.error('Contact data is missing');
     return next();
   }
-
+  console.log('Processing contact:', contact); // Adiciona log para depuração
   switch (contact.step) {
     case 'getCNPJ':
       await sendCNPJMessage(contact.phoneNumber);

@@ -30,6 +30,7 @@ const handleWebhook = async (req, res, next) => {
           break;
         case 'suporte':
         case 'support':  // ID do botão de suporte
+          await sendSupportMessage(contact.phoneNumber); // Adiciona aqui a chamada para mensagem de suporte
           contact.step = contact.step || 'getCNPJ';
           await processContactMessage(req, res, next); // Chama o controlador para processar a mensagem
           break;
