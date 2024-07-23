@@ -1,5 +1,6 @@
 // middleware/messageProcessor.js
 const { setProcessedData } = require('../utils/processWebhookData');
+const { formatPhoneNumber } = require('../utils/phoneUtils');  // Importe a função formatPhoneNumber
 
 const messageProcessor = (req, res, next) => {
   try {
@@ -18,7 +19,7 @@ const messageProcessor = (req, res, next) => {
     const message = changes.value.messages && changes.value.messages[0];
     if (message) {
       const contacts = changes.value.contacts && changes.value.contacts[0];
-      const formattedPhoneNumber = message.from;
+      const formattedPhoneNumber = formatPhoneNumber(message.from);  // Formate o número de telefone
       const name = contacts ? contacts.profile.name : 'N/A';
       const whatsappId = contacts ? contacts.wa_id : 'N/A';
       
