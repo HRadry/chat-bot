@@ -1,5 +1,5 @@
 // controllers/supportController.js
-const sendSupportRequestMessage = require('../whatsapp/sendSupportRequestMessage');
+const sendSupportRequestMessage = require('../whatsapp/sendSupportMessage');
 
 const processContactMessage = async (req, res, next) => {
   const { contact } = req.processedData;
