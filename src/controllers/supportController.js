@@ -10,7 +10,6 @@ const processContactMessage = async (req, res, next) => {
 
   // Adicionando log para verificar o contato
   console.log('Processing contact:', contact);
-  console.log('Text:', text);
 
 
   if (!contact) {
