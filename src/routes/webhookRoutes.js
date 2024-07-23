@@ -5,10 +5,9 @@ const { handleWebhook } = require('../controllers/webhookController');
 const verificationController = require('../controllers/verificationController');
 const messageProcessor = require('../middleware/messageProcessor');
 const statusProcessor = require('../middleware/statusProcessor');
-const { processContactMessage } = require('../controllers/supportController');
 
 // Middleware de processamento básico
-router.post('/', messageProcessor, statusProcessor, handleWebhook, processContactMessage);
+router.post('/', messageProcessor, statusProcessor, handleWebhook);
 
 // Rota para verificação do webhook
 router.get('/', verificationController.verifyWebhook);
