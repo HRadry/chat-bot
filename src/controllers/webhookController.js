@@ -23,8 +23,6 @@ const handleWebhook = async (req, res, next) => {
           await sendGreetingMessage(contact.phoneNumber);
           contact.step = 'getCNPJ';  // Define o próximo passo
           console.log('Step updated to getCNPJ', contact.step);
-          break;
-        case 'getCNPJ':
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
           break;
