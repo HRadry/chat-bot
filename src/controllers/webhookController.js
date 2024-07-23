@@ -1,12 +1,9 @@
 // controllers/webhookController.js
-//const sendSalesMessage = require('../whatsapp/sendSalesMessage');
-//const sendExitMessage = require('../whatsapp/sendExitMessage');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
-//const sendSupportMessage = require('../whatsapp/sendSupportMessage');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
-const { processContactMessage } = require('./controller'); // Verifique o caminho
+const { processContactMessage } = require('../utils/validationUtils'); // Verifique o caminho
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
@@ -22,7 +19,7 @@ const handleWebhook = async (req, res, next) => {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
           await sendGreetingMessage(contact.phoneNumber);
           contact.step = 'getCNPJ';  // Define o próximo passo
-          console.log('Step updated to getCNPJ', contact.step);
+          console.log('Step updated', contact.step);
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
           break;
