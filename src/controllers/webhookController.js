@@ -4,6 +4,7 @@ const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
 const { processContactMessage } = require('../utils/validationUtils'); // Verifique o caminho
+const redis = require('../redisClient');
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
@@ -18,14 +19,14 @@ const handleWebhook = async (req, res, next) => {
       switch (contact.step) {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
           await sendGreetingMessage(contact.phoneNumber);
-          contact.step = 'getCNPJ';  // Define o próximo passo
-          console.log('Step updated', contact.step);
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
+          await redis.set(contact.whatsappId,JSON.stringify(contact))
           break;
         case 'getEmail':
           await sendEmailMessage(contact.phoneNumber);
           contact.step = 'awaitEMAIL';  // Define o próximo passo
+          await redis.set(contact.whatsappId,JSON.stringify(contact))
           break;
         default:
           console.log('Default case for message handling');
