@@ -1,5 +1,4 @@
 // utils/contactUtils.js
-
 /**
  * Valida um CNPJ.
  * @param {string} cnpj - O CNPJ a ser validado.
@@ -56,38 +55,7 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-/**
-* Processa a mensagem do contato, validando e atualizando conforme necessário.
-* @param {object} contact - O objeto de contato que contém o estado e os dados.
-* @param {string} text - O texto da mensagem recebida.
-* @returns {Promise<void>}
-*/
-async function processContactMessage(contact, text) {
-  if (contact.step === 'awaitCNPJ') {
-      if (validateCNPJ(text)) {
-          contact.cnpj = text;
-          console.log('CNPJ is valid:', contact.cnpj);
-          await sendEmailMessage(contact.phoneNumber);
-          contact.step = 'awaitEMAIL';
-          await redis.set(contact.whatsappId,JSON.stringify(contact));
-      } else {
-          console.log('Invalid CNPJ:', text);
-          // Enviar mensagem de erro ou instruções adicionais se necessário
-      }
-  } else if (contact.step === 'awaitEMAIL') {
-      if (validateEmail(text)) {
-          contact.email = text;
-          console.log('Email is valid:', contact.email);
-          contact.step = 'completed'; // Marca a conversa como completa
-      } else {
-          console.log('Invalid email:', text);
-          // Enviar mensagem de erro ou instruções adicionais se necessário
-      }
-  }
-}
-
 module.exports = {
   validateCNPJ,
   validateEmail,
-  processContactMessage
 };

@@ -1,9 +1,9 @@
 // controllers/webhookController.js
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
-const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
+//const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
-const { processContactMessage } = require('../utils/validationUtils'); // Verifique o caminho
+const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // Verifique o caminho
 const redis = require('../redisClient');
 
 const handleWebhook = async (req, res, next) => {
@@ -23,19 +23,33 @@ const handleWebhook = async (req, res, next) => {
           contact.step = 'awaitCNPJ';  // Define o próximo passo
           await redis.set(contact.whatsappId,JSON.stringify(contact))
           break;
-        case 'getEmail':
-          await sendEmailMessage(contact.phoneNumber);
-          contact.step = 'awaitEMAIL';  // Define o próximo passo
-          await redis.set(contact.whatsappId,JSON.stringify(contact));
+        case 'awaitCNPJ':
+          if (validateCNPJ(text)) {
+            contact.cnpj = text;
+            console.log('CNPJ is valid:', contact.cnpj);
+            await sendEmailMessage(contact.phoneNumber);
+            contact.step = 'awaitEMAIL';
+            await redis.set(contact.whatsappId,JSON.stringify(contact));
+          } else {
+            console.log('Invalid CNPJ:', text);
+            // Enviar mensagem de erro ou instruções adicionais se necessário
+          }
           break;
-        default:
-          console.log('Default case for message handling');
+        case 'awaitEMAIL':
+          if (validateEmail(text)) {
+            contact.email = text;
+            console.log('Email is valid:', contact.email);
+            contact.step = 'completed'; // Marca a conversa como completa
+            await redis.set(contact.whatsappId,JSON.stringify(contact))
+          } else {
+              console.log('Invalid email:', text);
+              // Enviar mensagem de erro ou instruções adicionais se necessário
+          }
           break;
+        case 'completed':
+          console.log('completamos')   
       }
-      // Chama processContactMessage apenas quando o step é 'awaitCNPJ' ou 'awaitEMAIL'
-      if (contact.step === 'awaitCNPJ' || contact.step === 'awaitEMAIL') {
-        await processContactMessage(contact, normalizedText);
-      }
+
     } catch (error) {
       console.error('Error handling webhook:', error);
     }
