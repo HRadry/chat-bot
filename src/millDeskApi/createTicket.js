@@ -1,9 +1,10 @@
 const axios = require('axios');
 
 const createTicket = async (contact) => {
-  const { email, issueDescription } = contact;
+  const { issueDescription } = contact;
   const apiKey = process.env.MILLDESK_API_KEY;
   const title = 'Solicitação de Suporte via WhatsApp';
+  const email = process.env.EMAIL_MILLDESK;
 
   const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${issueDescription}`;
 

@@ -2,17 +2,17 @@ webhook-serve-Railway
 │
 ├── src/
 │   ├── app.js
+│   ├── redisClient.js
 │   ├── assets
 │   │   ├── istockphoto-460743571-1024x1024.jpg
 │   ├── controllers/
-│   │   ├──supportController.js
 │   │   ├── webhookController.js
 │   │   └── verificationController.js
 │   ├── middleware/
-│   │   ├── contactValidationMiddleware.js
 │   │   ├── messageProcessor.js
 │   │   ├── statusProcessor.js
-│   │   ├── mildeskMiddleware.js
+│   ├── millDeskApi
+│   │   └──createTicket.js
 │   ├── routes/
 │   │   └── webhookRoutes.js
 │   ├── utils/
@@ -22,6 +22,8 @@ webhook-serve-Railway
 │   │   ├── ValidantionUtils.js
 │   └── Whatsapp/
 │   │   ├──sendExitMessage.js
+│   │   ├──sedConfirmationMessage.js
+│   │   ├──sendDescripitionMessage.js
 │   │   ├──sendGreetingMessage.js
 │   │   ├──sendMenuPrincipal.js
 │   │   ├──sendSalesMessage.js

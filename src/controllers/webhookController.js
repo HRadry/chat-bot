@@ -7,6 +7,7 @@ const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // 
 const redis = require('../redisClient');
 const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage');
 const sendConfirmationMessage = require('../whatsapp/sendConfirmationMessage');
+const { createTicket } = require('../millDeskApi/createTicket'); // Importe a função createTicket
 
 
 const SUPPORT_EXPIRATION = 60
@@ -59,6 +60,7 @@ const handleWebhook = async (req, res, next) => {
           await sendConfirmationMessage (contact.phoneNumber);
           contact.step = 'completed';
           //TODO: Enviar as informações coletadas e Enviar para a API
+          await createTicket(contact); // Chame a função createTicket aqui
           //TODO: Enviar as informações coletadas para a Base de dados
           await redis.del(contact.whatsappId)
       }
