@@ -26,7 +26,7 @@ const handleWebhook = async (req, res, next) => {
         case 'getEmail':
           await sendEmailMessage(contact.phoneNumber);
           contact.step = 'awaitEMAIL';  // Define o próximo passo
-          await redis.set(contact.whatsappId,JSON.stringify(contact))
+          await redis.set(contact.whatsappId,JSON.stringify(contact));
           break;
         default:
           console.log('Default case for message handling');

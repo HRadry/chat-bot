@@ -67,7 +67,9 @@ async function processContactMessage(contact, text) {
       if (validateCNPJ(text)) {
           contact.cnpj = text;
           console.log('CNPJ is valid:', contact.cnpj);
-          contact.step = 'getEmail'; // Avança para o próximo passo
+          await sendEmailMessage(contact.phoneNumber);
+          contact.step = 'awaitEMAIL';
+          await redis.set(contact.whatsappId,JSON.stringify(contact));
       } else {
           console.log('Invalid CNPJ:', text);
           // Enviar mensagem de erro ou instruções adicionais se necessário
