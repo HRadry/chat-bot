@@ -29,11 +29,8 @@ const handleWebhook = async (req, res, next) => {
           break;
         default:
           console.log('Default case for message handling');
-          await sendGreetingMessage(contact.phoneNumber);
-          await sendMenuPrincipal(contact.phoneNumber);
           break;
       }
-
       // Chama processContactMessage apenas quando o step é 'awaitCNPJ' ou 'awaitEMAIL'
       if (contact.step === 'awaitCNPJ' || contact.step === 'awaitEMAIL') {
         await processContactMessage(contact, normalizedText);

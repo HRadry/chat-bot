@@ -1,8 +1,10 @@
 // middleware/messageProcessor.js
 const { setProcessedData } = require('../utils/processWebhookData');
 const { formatPhoneNumber } = require('../utils/phoneUtils');  // Importe a função formatPhoneNumber
+const redis = require('../redisClient');
 
-const messageProcessor = (req, res, next) => {
+
+const messageProcessor = async(req, res, next) => {
   try {
     const entry = req.body.entry && req.body.entry[0];
     if (!entry) {
@@ -23,12 +25,21 @@ const messageProcessor = (req, res, next) => {
       const name = contacts ? contacts.profile.name : 'N/A';
       const whatsappId = contacts ? contacts.wa_id : 'N/A';
       
-      const contact = {
-        name: name || '',
-        phoneNumber: formattedPhoneNumber || '',
-        whatsappId: whatsappId || '',
-        step: ''
-      };
+      let contact = JSON.parse(await redis.get(whatsappId));
+      
+      if (!contact) { 
+        contact = {
+          name: name || '',
+          phoneNumber: formattedPhoneNumber || '',
+          whatsappId: whatsappId || '',
+          step: ''
+        };
+        redis.set(whatsappId,JSON.stringify(contact))
+        console.log('criando atendimento',contact)
+      }
+      else {
+        console.log('atendimento existente',contact)
+      }
 
       if (message.type === 'text') {
         setProcessedData(req, {
