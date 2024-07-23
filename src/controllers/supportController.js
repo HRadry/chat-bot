@@ -7,6 +7,9 @@ const sendConfirmationMessage = require('../whatsapp/sendConfirmationMessage')
 const processContactMessage = async (req, res, next) => {
   const { contact } = req.processedData;
 
+  // Adicionando log para verificar o contato
+  console.log('Processing contact:', contact);
+
   if (!contact) {
     console.error('Contact data is missing');
     return next();

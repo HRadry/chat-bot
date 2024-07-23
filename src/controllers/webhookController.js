@@ -12,6 +12,11 @@ const handleWebhook = async (req, res, next) => {
     const { contact, text } = req.processedData;
     const normalizedText = text.toLowerCase().trim();
 
+    // Adicionando log para verificar o contato
+    console.log('Contact:', contact);
+    console.log('Text:', text);
+
+    
     try {
       switch (normalizedText) {
         case 'vendas':

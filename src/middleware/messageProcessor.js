@@ -30,6 +30,9 @@ const messageProcessor = (req, res, next) => {
         step: 'getCNPJ'
       };
 
+      console.log('Contact:', contact);
+      console.log('Text:', text);
+
       if (message.type === 'text') {
         setProcessedData(req, {
           type: 'message',
