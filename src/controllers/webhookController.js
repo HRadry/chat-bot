@@ -1,10 +1,11 @@
 // controllers/webhookController.js
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
-//const sendMenuPrincipal = require('../whatsapp/sendMenuPrincipal');
+const sendSupportMessage = require('../whatsapp/sendSupportMessage');
 const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
 const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // Verifique o caminho
 const redis = require('../redisClient');
+const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage');
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
@@ -38,16 +39,24 @@ const handleWebhook = async (req, res, next) => {
         case 'awaitEMAIL':
           if (validateEmail(text)) {
             contact.email = text;
-            console.log('Email is valid:', contact.email);
-            contact.step = 'completed'; // Marca a conversa como completa
+            console.log ('Email is valid:', contact.email);
+            await sendSupportMessage (contact.phoneNumber);
+            await sendDescriptionMessage (contact.phoneNumber);
+            contact.step = 'awaitSuport'; // Marca a conversa como completa
             await redis.set(contact.whatsappId,JSON.stringify(contact))
           } else {
               console.log('Invalid email:', text);
               // Enviar mensagem de erro ou instruções adicionais se necessário
           }
-          break;
-        case 'completed':
-          console.log('completamos')   
+            break;
+        case 'awaitSuport':
+          contact.description = text;
+          console.log ('Descrição do problema', contact.description);
+          await sendConfirmationMessage (contact.phoneNumber);
+          contact.step = 'completed';
+          //TODO: Enviar as informações coletadas e Enviar para a API
+          //TODO: Enviar as informações coletadas para a Base de dados
+          await redis.del(contact.whatsappId)
       }
 
     } catch (error) {

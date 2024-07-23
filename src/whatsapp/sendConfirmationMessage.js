@@ -1,6 +1,6 @@
 const sendMessage = require('../utils/messageSender');
 
-const sendSupportMessage = async (phoneNumber) => {
+const sendConfirmationMessage = async (phoneNumber) => {
   const supportData = {
     type: 'text',
     text: {
@@ -12,4 +12,4 @@ const sendSupportMessage = async (phoneNumber) => {
   console.log(`confirmation message sent to ${phoneNumber}`);
 };
 
-module.exports = sendSupportMessage;
+module.exports = sendConfirmationMessage;

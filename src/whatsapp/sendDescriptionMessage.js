@@ -1,6 +1,6 @@
 const sendMessage = require('../utils/messageSender');
 
-const sendSupportMessage = async (phoneNumber) => {
+const sendDescriptionMessage = async (phoneNumber) => {
   const supportData = {
     type: 'text',
     text: {
@@ -11,4 +11,4 @@ const sendSupportMessage = async (phoneNumber) => {
   await sendMessage(phoneNumber, supportData);
 };
 
-module.exports = sendSupportMessage;
+module.exports = sendDescriptionMessage;
