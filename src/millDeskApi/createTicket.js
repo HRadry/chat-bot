@@ -3,11 +3,10 @@ require('dotenv').config();
 
 
 const createTicket = async (contact) => {
-  const { description: issueDescription } = contact;
   const apiKey = process.env.MILLDESK_API_KEY;
-  const title = ('WhatsApp');
-  const email = (process.env.EMAIL_MILLDESK);
-  const description = (issueDescription);
+  const title = contact.cnpj;
+  const email = process.env.EMAIL_MILLDESK;
+  const description = contact.descripition;
 
   const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${description}`;
 
