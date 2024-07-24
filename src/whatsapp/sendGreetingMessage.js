@@ -17,3 +17,9 @@ const sendGreetingMessage = async (contact) => {
 };
 
 module.exports = sendGreetingMessage;
+
+
+
+
+
+
