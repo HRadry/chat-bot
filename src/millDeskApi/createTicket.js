@@ -9,7 +9,7 @@ const createTicket = async (contact) => {
   const email = (process.env.EMAIL_MILLDESK);
   const description = (issueDescription);
 
-  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=:${title}&description=${description}`;
+  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${description}`;
 
   try {
     const response = await axios.get(url);
