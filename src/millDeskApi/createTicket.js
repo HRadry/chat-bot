@@ -6,7 +6,7 @@ const createTicket = async (contact) => {
   const apiKey = process.env.MILLDESK_API_KEY;
   const title = contact.cnpj;
   const email = process.env.EMAIL_MILLDESK;
-  const description = contact.descripition;
+  const description = contact.description;
 
   const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${description}`;
 
