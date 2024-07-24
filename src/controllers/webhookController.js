@@ -1,7 +1,7 @@
 // controllers/webhookController.js
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const sendSupportMessage = require('../whatsapp/sendSupportMessage');
-const sendCNPJMessage = require('../whatsapp/sendCNPJMessage');
+const { sendCNPJMessage,sendInvalidCNPJMessage } = require('../whatsapp/sendCNPJMessage');
 const sendEmailMessage = require('../whatsapp/sendEmailMessage');
 const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // Verifique o caminho
 const redis = require('../redisClient');
@@ -24,7 +24,7 @@ const handleWebhook = async (req, res, next) => {
     try {
       switch (contact.step) {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
-          await sendGreetingMessage(contact.phoneNumber);
+          await sendGreetingMessage(contact);
           await new Promise(resolve => setTimeout(resolve, 1000)); //atraso de 1 segundo para sincornizar mensagens.
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
@@ -39,7 +39,8 @@ const handleWebhook = async (req, res, next) => {
             await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION);
           } else {
             console.log('Invalid CNPJ:', text);
-            // Enviar mensagem de erro ou instruções adicionais se necessário
+            await sendInvalidCNPJMessage(contact.phoneNumber);
+            contact.step = 'awaitCNPJ';
           }
           break;
         case 'awaitEMAIL':
