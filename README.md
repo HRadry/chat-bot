@@ -34,3 +34,23 @@ webhook-serve-Railway
 ├── .gitignore
 ├── .env
 ├── package.json
+
+
+
+
+
+/*         case 'awaitEMAIL':
+          if (validateEmail(text)) {
+            contact.email = text;
+            console.log ('Email is valid:', contact.email);
+            await sendSupportMessage (contact.phoneNumber);
+            
+            contact.step = 'awaitSuport'; // Marca a conversa como completa
+            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION)
+          } else {
+              console.log('Invalid email:', text);
+              //montar mensagens de e-mail.
+              //await sendInvalidCNPJMessage(contact.phoneNumber);
+              contact.step = 'awaitCNPJ';
+          }
+            break; */

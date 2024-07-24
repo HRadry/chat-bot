@@ -1,12 +1,9 @@
 // controllers/webhookController.js
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
-const sendSupportMessage = require('../whatsapp/sendSupportMessage');
+const {sendSupportMessage, sendConfirmationMessage, sendDescriptionMessage} = require('../whatsapp/sendSupportMessage');
 const { sendCNPJMessage,sendInvalidCNPJMessage } = require('../whatsapp/sendCNPJMessage');
-const sendEmailMessage = require('../whatsapp/sendEmailMessage');
-const { validateCNPJ, validateEmail } = require('../utils/validationUtils'); // Verifique o caminho
+const { validateCNPJ} = require('../utils/validationUtils'); // Verifique o caminho
 const redis = require('../redisClient');
-const sendDescriptionMessage = require('../whatsapp/sendDescriptionMessage');
-const sendConfirmationMessage = require('../whatsapp/sendConfirmationMessage');
 const { createTicket } = require('../millDeskApi/createTicket'); // Importe a função createTicket
 
 
@@ -17,7 +14,7 @@ const handleWebhook = async (req, res, next) => {
 
   if (type === 'message') {
     const { contact, text } = req.processedData;
-    const normalizedText = text.toLowerCase().trim();
+    //const normalizedText = text.toLowerCase().trim();
 
     console.log('Received message:', { contact, text });
 
@@ -34,8 +31,9 @@ const handleWebhook = async (req, res, next) => {
           if (validateCNPJ(text)) {
             contact.cnpj = text;
             console.log('CNPJ is valid:', contact.cnpj);
-            await sendEmailMessage(contact.phoneNumber);
-            contact.step = 'awaitEMAIL';
+            await sendSupportMessage (contact.phoneNumber);
+            await sendDescriptionMessage (contact.phoneNumber);
+            contact.step = 'awaitSuport';
             await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION);
           } else {
             console.log('Invalid CNPJ:', text);
@@ -43,26 +41,12 @@ const handleWebhook = async (req, res, next) => {
             contact.step = 'awaitCNPJ';
           }
           break;
-        case 'awaitEMAIL':
-          if (validateEmail(text)) {
-            contact.email = text;
-            console.log ('Email is valid:', contact.email);
-            await sendSupportMessage (contact.phoneNumber);
-            await sendDescriptionMessage (contact.phoneNumber);
-            contact.step = 'awaitSuport'; // Marca a conversa como completa
-            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION)
-          } else {
-              console.log('Invalid email:', text);
-              // Enviar mensagem de erro ou instruções adicionais se necessário
-          }
-            break;
         case 'awaitSuport':
           contact.description = text;
           console.log ('Descrição do problema', contact.description);
           await sendConfirmationMessage (contact.phoneNumber);
           contact.step = 'completed';
-          //TODO: Enviar as informações coletadas e Enviar para a API
-          await createTicket(contact); // Chame a função createTicket aqui
+          await createTicket(contact);
           //TODO: Enviar as informações coletadas para a Base de dados
           await redis.del(contact.whatsappId)
       }
