@@ -25,6 +25,7 @@ const handleWebhook = async (req, res, next) => {
       switch (contact.step) {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
           await sendGreetingMessage(contact.phoneNumber);
+          await new Promise(resolve => setTimeout(resolve, 1000)); //atraso de 1 segundo para sincornizar mensagens.
           await sendCNPJMessage(contact.phoneNumber);
           contact.step = 'awaitCNPJ';  // Define o próximo passo
           await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX' ,SUPPORT_EXPIRATION)
