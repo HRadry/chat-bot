@@ -1,10 +1,8 @@
 const sendMessage = require('../utils/messageSender');
 
 // Mensagem de Suporte
-const sendSupportMessage = async (contact) => {
-  const { phoneNumber } = contact;
-
-  const supportData = {
+const sendSupportMessage = async (phoneNumber) => {
+  const messageData = { 
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
@@ -12,15 +10,13 @@ const sendSupportMessage = async (contact) => {
     }
   };
 
-  await sendMessage(phoneNumber, supportData);
+  await sendMessage(phoneNumber, messageData);
   console.log(`Support message sent to ${phoneNumber}`);
 };
 
 // Mensagem de Descrição
-const sendDescriptionMessage = async (contact) => {
-  const { phoneNumber } = contact;
-
-  const descriptionData = {
+const sendDescriptionMessage = async (phoneNumber) => {
+  const messageData = { 
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
@@ -28,15 +24,13 @@ const sendDescriptionMessage = async (contact) => {
     }
   };
 
-  await sendMessage(phoneNumber, descriptionData);
+  await sendMessage(phoneNumber, messageData);
   console.log(`Description message sent to ${phoneNumber}`);
 };
 
 // Mensagem de Confirmação
-const sendConfirmationMessage = async (contact) => {
-  const { phoneNumber } = contact;
-
-  const confirmationData = {
+const sendConfirmationMessage = async (phoneNumber) => {
+  const messageData = { 
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
@@ -44,7 +38,7 @@ const sendConfirmationMessage = async (contact) => {
     }
   };
 
-  await sendMessage(phoneNumber, confirmationData);
+  await sendMessage(phoneNumber, messageData);
   console.log(`Confirmation message sent to ${phoneNumber}`);
 };
 
