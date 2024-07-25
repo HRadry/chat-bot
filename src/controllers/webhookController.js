@@ -31,6 +31,7 @@ const handleWebhook = async (req, res, next) => {
 
           case 'awaitEMAIL':
             if (validateEmail(text)) {
+              await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
               console.log('Email is valid:', contact.email);
               // Verifica se o e-mail existe na lista de solicitantes
               const emailRegistered = await emailExists(text);
