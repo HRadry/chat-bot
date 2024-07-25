@@ -4,7 +4,7 @@ const { createTicket } = require('../millDeskApi/createTicket'); // Importe a fu
 const { validateEmail, emailExists } = require('../millDeskApi/validationEmail');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const { sendEmailMessage , sendInvalidEmailMessage } = require('../whatsapp/sendEmailMessage');
-const {sendConfirmationMessage, sendDescriptionMessage} = require('../whatsapp/sendSupportMessage');
+const {sendConfirmationMessage, sendDescriptionMessage , sendAddTitleMessage} = require('../whatsapp/sendSupportMessage');
 const { sendResponsibleNameMessage, sendResponsibleContactMessage , sendInvalidPhoneNumberMessage} = require('../whatsapp/sendContactMessage');
 const { validatePhoneNumber } = require('../utils/phoneUtils');
 
@@ -35,10 +35,10 @@ const handleWebhook = async (req, res, next) => {
             if (validateEmail(text)) {
               contact.email = text;
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
-              const emailRegistered = await emailExists(text);
-              if (emailRegistered) {
-                contact.email = text;
-                await sendResponsibleNameMessage(contact.phoneNumber);
+              const { exists, location } = await emailExists(text);
+              if (exists) {
+                contact.location = location
+                await sendResponsibleNameMessage(contact.phoneNumber, location);
                 contact.step = 'awaitResponsible';
                 await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
               } else {
@@ -63,12 +63,18 @@ const handleWebhook = async (req, res, next) => {
             if (validatePhoneNumber(text)) {
               contact.conto_Responsavel = (text);
               await sendDescriptionMessage(contact.phoneNumber);
-              contact.step = 'awaitSuport';
+              contact.step = 'awaitTitle';
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
             } else {
                 await sendInvalidPhoneNumberMessage(contact.phoneNumber);
                 contact.step = 'awaitContact'; // Solicitar novamente o número de telefone
             }
+            break;
+          case 'awaitTitle':
+            contact.title = (text);
+            await sendAddTitleMessage(contact.phoneNumber);
+            contact.step = 'awaitSuport';
+            await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
             break;
 
           case 'awaitSuport':

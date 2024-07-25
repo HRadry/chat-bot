@@ -1,17 +1,17 @@
 const sendMessage = require('../utils/messageSender');
 
-// Mensagem de Suporte
-const sendSupportMessage = async (phoneNumber) => {
-  const messageData = { 
+// Mensagem para adicionar título ao ticket
+const sendAddTitleMessage = async (phoneNumber) => {
+  const messageData = {
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
-      body: `💔 Poxa, que chato que você está enfrentando problemas... 😟 Mas não se preocupe! Vou abrir um chamado para você e te conectar com um especialista. 🛠️✨ Um momento, por favor! 😉`
+      body: `📝 Vamos deixar seu ticket ainda mais organizado? Que tal adicionar um título para facilitar a nossa vida e garantir que tudo seja resolvido rapidinho? 🚀 Diga um título bacana que descreva o que está acontecendo e estaremos prontos para ajudar! 😄✨`
     }
   };
 
   await sendMessage(phoneNumber, messageData);
-  console.log(`Support message sent to ${phoneNumber}`);
+  console.log(`Add title message sent to ${phoneNumber}`);
 };
 
 // Mensagem de Descrição
@@ -42,4 +42,4 @@ const sendConfirmationMessage = async (phoneNumber) => {
   console.log(`Confirmation message sent to ${phoneNumber}`);
 };
 
-module.exports = { sendSupportMessage, sendDescriptionMessage, sendConfirmationMessage };
+module.exports = { sendSupportMessage, sendDescriptionMessage, sendConfirmationMessage , sendAddTitleMessage };

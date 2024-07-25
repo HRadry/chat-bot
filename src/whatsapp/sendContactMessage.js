@@ -1,12 +1,12 @@
 const sendMessage = require('../utils/messageSender');
 
 // Mensagem para saber quem é o responsável pelo chamado
-const sendResponsibleNameMessage = async (phoneNumber) => {
+const sendResponsibleNameMessage = async (phoneNumber, location) => {
   const messageData = {
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
-      body: `🕵️‍♂️ Quem vai ser o super-herói que vai gerenciar este chamado? 😎 Pode me contar o nome da pessoa responsável? 💪✨`
+      body: `🕵️‍♂️ Quem vai ser o super-herói da ${location} que vai gerenciar este chamado? 😎 Pode me contar o nome da pessoa responsável? 💪✨`
     }
   };
 

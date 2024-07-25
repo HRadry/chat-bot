@@ -14,16 +14,16 @@ async function emailExists(email) {
     try {
         const response = await axios.get(url);
         const requesters = response.data;
-
-        // Itera sobre os solicitantes e verifica se o e-mail existe
         for (const requester of requesters) {
             if (requester.email === email) {
-                console.log(`O e-mail "${email}" foi encontrado na lista de solicitantes.`);
-                return true; // E-mail encontrado
+                return {
+                    exists: true,
+                    location: requester.location,
+                  };
             }
         }
         console.log(`O e-mail "${email}" não foi encontrado na lista de solicitantes.`);
-        return false; // E-mail não encontrado
+        return { exists: false };
     } catch (error) {
         console.error('Erro ao verificar e-mail:', error);
         return false;

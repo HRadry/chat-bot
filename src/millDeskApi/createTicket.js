@@ -1,24 +1,29 @@
 const axios = require('axios');
 require('dotenv').config();
 
-
 const createTicket = async (contact) => {
   const apiKey = process.env.MILLDESK_API_KEY;
-  const title = contact.cnpj;
-  const email = process.env.EMAIL_MILLDESK;
+  const title = contact.title;
+  const email = contact.email;
   const description = contact.description;
+  const additionalInfo = `
+  Informações do Contato:
+  Nome: ${contact.name}
+  Número de Telefone: ${contact.phoneNumber}
+  Responsável: ${contact.responsavel}
+  Contato Responsável: ${contact.contato_responsavel}`;
 
-  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${description}`;
+  const fullDescription = `${description}${additionalInfo}`;
+  
+  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${encodeURIComponent(fullDescription)}`;
 
   try {
     const response = await axios.get(url);
-    console.log('Ticket criado na MillDesk:', response.data);
-    console.log(email, url)
+    console.log(response.data);
+    console.log(url);
   } catch (error) {
     console.error('Erro ao criar ticket na MillDesk:', error);
   }
 };
 
-module.exports = {
-  createTicket,
-};
+module.exports = { createTicket };
