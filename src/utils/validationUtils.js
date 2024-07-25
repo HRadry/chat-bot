@@ -45,17 +45,4 @@ function validateCNPJ(cnpj) {
   return true;
 }
 
-/**
-* Valida um e-mail.
-* @param {string} email - O e-mail a ser validado.
-* @returns {boolean} - Retorna verdadeiro se o e-mail for válido, caso contrário, falso.
-*/
-function validateEmail(email) {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\.,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,})$/i;
-  return re.test(String(email).toLowerCase());
-}
-
-module.exports = {
-  validateCNPJ,
-  validateEmail,
-};
+module.exports = { validateCNPJ };

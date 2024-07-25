@@ -39,18 +39,21 @@ webhook-serve-Railway
 
 
 
-/*         case 'awaitEMAIL':
-          if (validateEmail(text)) {
-            contact.email = text;
-            console.log ('Email is valid:', contact.email);
+
+        case 'awaitCNPJ':
+          if (validateCNPJ(text)) {
+            contact.cnpj = text;
+            console.log('CNPJ is valid:', contact.cnpj);
             await sendSupportMessage (contact.phoneNumber);
-            
-            contact.step = 'awaitSuport'; // Marca a conversa como completa
-            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION)
+            await sendDescriptionMessage (contact.phoneNumber);
+            contact.step = 'awaitSuport';
+            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION);
           } else {
-              console.log('Invalid email:', text);
-              //montar mensagens de e-mail.
-              //await sendInvalidCNPJMessage(contact.phoneNumber);
-              contact.step = 'awaitCNPJ';
+            console.log('Invalid CNPJ:', text);
+            await sendInvalidCNPJMessage(contact.phoneNumber);
+            contact.step = 'awaitCNPJ';
           }
-            break; */
+          break;
+
+
+
