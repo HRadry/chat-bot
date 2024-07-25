@@ -6,7 +6,7 @@ const sendResponsibleNameMessage = async (phoneNumber, location) => {
     messaging_product: 'whatsapp',
     type: 'text',
     text: {
-      body: `🕵️‍♂️ Quem vai ser o super-herói da **${location}** que vai gerenciar este chamado? 😎 Pode me contar o nome da pessoa responsável? 💪✨`
+      body: `🕵️‍♂️ Quem vai ser o super-herói da *${location}* que vai gerenciar este chamado? 😎 Pode me contar o nome da pessoa responsável? 💪✨`
     }
   };
 
