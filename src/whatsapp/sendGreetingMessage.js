@@ -3,7 +3,7 @@ const sendMessage = require('../utils/messageSender');
 const sendGreetingMessage = async (contact) => {
   const { name, phoneNumber } = contact;
 
-  const greetingData = {
+  const messageData = {
     messaging_product: 'whatsapp',
     type: 'image',
     image: {
@@ -12,7 +12,7 @@ const sendGreetingMessage = async (contact) => {
     }
   };
 
-  await sendMessage(phoneNumber, greetingData);
+  await sendMessage(phoneNumber, messageData);
   console.log(`Greeting message sent to ${name} at ${phoneNumber}`);
 };
 
