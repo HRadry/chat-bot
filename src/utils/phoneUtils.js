@@ -8,4 +8,10 @@ function formatPhoneNumber(phoneNumber) {
     }
 }
 
-module.exports = { formatPhoneNumber };
+function validatePhoneNumber(phoneNumber) {
+    const re = /^\d{10,11}$/;
+    return re.test(phoneNumber);
+}
+
+
+module.exports = { formatPhoneNumber , validatePhoneNumber };
