@@ -15,7 +15,6 @@ const handleWebhook = async (req, res, next) => {
 
   if (type === 'message') {
     const { contact, text } = req.processedData;
-    //const normalizedText = text.toLowerCase().trim();
 
     console.log('Received message:', { contact, text });
 
@@ -53,15 +52,15 @@ const handleWebhook = async (req, res, next) => {
               contact.step = 'awaitEMAIL'; // Solicitar novamente o e-mail
             }
             break;
-        case 'awaitSuport':
-          contact.description = text;
-          console.log ('Descrição do problema', contact.description);
-          await sendConfirmationMessage (contact.phoneNumber);
-          contact.step = 'completed';
-          await createTicket(contact);
-          //TODO: Enviar as informações coletadas para a Base de dados
-          await redis.del(contact.whatsappId)
-      }
+          case 'awaitSuport':
+            contact.description = text;
+            console.log ('Descrição do problema', contact.description);
+            await sendConfirmationMessage (contact.phoneNumber);
+            contact.step = 'completed';
+            await createTicket(contact);
+            //TODO: Enviar as informações coletadas para a Base de dados
+            await redis.del(contact.whatsappId)
+        }
 
     } catch (error) {
       console.error('Error handling webhook:', error);
