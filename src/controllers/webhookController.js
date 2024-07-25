@@ -8,7 +8,7 @@ const {sendSupportMessage, sendConfirmationMessage, sendDescriptionMessage} = re
 //const { sendCNPJMessage,sendInvalidCNPJMessage } = require('../whatsapp/sendCNPJMessage');
 //const { validateCNPJ} = require('../utils/validationUtils'); // Verifique o caminho
 
-const SUPPORT_EXPIRATION = 60
+const SUPPORT_EXPIRATION = 180
 
 const handleWebhook = async (req, res, next) => {
   const { type } = req.processedData;
