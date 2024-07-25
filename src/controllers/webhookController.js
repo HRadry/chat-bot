@@ -18,9 +18,7 @@ const handleWebhook = async (req, res, next) => {
 
   if (type === 'message') {
     const { contact, text } = req.processedData;
-
-    console.log('Received message:', {text});
-
+    
     try {
       switch (contact.step) {
         case '':

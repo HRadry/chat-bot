@@ -6,12 +6,14 @@ const createTicket = async (contact) => {
   const title = contact.title;
   const email = contact.email;
   const description = contact.description;
-  const additionalInfo = `%0A%0AInformações do Contato:%0A` +
-                         `Chamado aberto por: ${contact.name}%0A` +
-                         `Telefone da Abertura: ${contact.phoneNumber}%0A` +
-                         `Local: ${contact.location}%0A` +
-                         `Responsável: ${contact.responsavel}%0A` +
-                         `Contato Responsável: ${contact.contato_responsavel}`;
+  const additionalInfo = `\r\n\r\nInformações do Contato:\r\n` +
+  `Chamado aberto por: ${contact.name}\r\n` +
+  `Telefone da Abertura: ${contact.phoneNumber}\r\n` +
+  `Local: ${contact.location}\r\n` +
+  `Responsável: ${contact.responsavel}\r\n` +
+  `Contato Responsável: ${contact.contato_responsavel}`;
+
+
 
   const fullDescription = `${description}${additionalInfo}`;
   
