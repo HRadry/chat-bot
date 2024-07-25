@@ -9,8 +9,8 @@ const createTicket = async (contact) => {
   const additionalInfo = `
   
   Informações do Contato:
-  Nome: ${contact.name}
-  Número de Telefone: ${contact.phoneNumber}
+  Chamado aberto por: ${contact.name}
+  Telefone da Abertura: ${contact.phoneNumber}
   Local: ${contact.location}
   Responsável: ${contact.responsavel}
   Contato Responsável: ${contact.contato_responsavel}
