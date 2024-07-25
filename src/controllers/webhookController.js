@@ -6,6 +6,7 @@ const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const { sendEmailMessage , sendInvalidEmailMessage } = require('../whatsapp/sendEmailMessage');
 const {sendConfirmationMessage, sendDescriptionMessage} = require('../whatsapp/sendSupportMessage');
 const { sendResponsibleNameMessage, sendResponsibleContactMessage , sendInvalidPhoneNumberMessage} = require('../whatsapp/sendContactMessage');
+const { validatePhoneNumber } = require('../utils/phoneUtils');
 
 //const { sendCNPJMessage,sendInvalidCNPJMessage } = require('../whatsapp/sendCNPJMessage');
 //const { validateCNPJ} = require('../utils/validationUtils'); // Verifique o caminho
@@ -57,13 +58,9 @@ const handleWebhook = async (req, res, next) => {
             contact.step = 'awaitContact';
             await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
             break;
-          
-            const { validatePhoneNumber } = require('./phoneNumberValidation');
 
           case 'awaitContact':
             if (validatePhoneNumber(text)) {
-              const formattedPhoneNumber = formatPhoneNumber(text);
-              contact.contato_responsavel = formattedPhoneNumber;
               await sendDescriptionMessage(contact.phoneNumber);
               contact.step = 'awaitSuport';
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
