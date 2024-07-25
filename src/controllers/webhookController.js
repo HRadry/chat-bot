@@ -22,18 +22,17 @@ const handleWebhook = async (req, res, next) => {
     try {
       switch (contact.step) {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
-          await sendGreetingMessage(contact);
+          await sendGreetingMessage(contact.phoneNumber);
           await new Promise(resolve => setTimeout(resolve, 1000)); //atraso de 1 segundo para sincornizar mensagens.
           await sendEmailMessage(contact.phoneNumber);
           contact.step = 'awaitEMAIL';  // Define o próximo passo
+          console.log('meu step agora é:', contact)
           await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX' ,SUPPORT_EXPIRATION)
           break;
 
           case 'awaitEMAIL':
             if (validateEmail(text)) {
-              
               console.log('Email is valid:', contact.email);
-          
               // Verifica se o e-mail existe na lista de solicitantes
               const emailRegistered = await emailExists(text);
               if (emailRegistered) {
