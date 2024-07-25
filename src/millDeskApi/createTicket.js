@@ -6,16 +6,16 @@ const createTicket = async (contact) => {
   const title = contact.title;
   const email = contact.email;
   const description = contact.description;
-  const additionalInfo = '\n\nInformações do Contato:\n' +
-                         `Chamado aberto por: ${contact.name}\n` +
-                         `Telefone da Abertura: ${contact.phoneNumber}\n` +
-                         `Local: ${contact.location}\n` +
-                         `Responsável: ${contact.responsavel}\n` +
+  const additionalInfo = `%0A%0AInformações do Contato:%0A` +
+                         `Chamado aberto por: ${contact.name}%0A` +
+                         `Telefone da Abertura: ${contact.phoneNumber}%0A` +
+                         `Local: ${contact.location}%0A` +
+                         `Responsável: ${contact.responsavel}%0A` +
                          `Contato Responsável: ${contact.contato_responsavel}`;
 
   const fullDescription = `${description}${additionalInfo}`;
   
-  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${encodeURIComponent(fullDescription)}`;
+  const url = `https://v1.milldesk.com/api/${apiKey}/addTicket?email=${email}&title=${title}&description=${fullDescription}`;
 
   try {
     const response = await axios.get(url);
