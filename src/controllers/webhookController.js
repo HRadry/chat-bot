@@ -61,8 +61,8 @@ const handleWebhook = async (req, res, next) => {
 
           case 'awaitContact':
             if (validatePhoneNumber(text)) {
-              contact.conto_Responsavel = (text);
-              await sendDescriptionMessage(contact.phoneNumber);
+              contact.contato_responsavel = (text);
+              await sendAddTitleMessage(contact.phoneNumber);
               contact.step = 'awaitTitle';
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
             } else {
@@ -72,7 +72,7 @@ const handleWebhook = async (req, res, next) => {
             break;
           case 'awaitTitle':
             contact.title = (text);
-            await sendAddTitleMessage(contact.phoneNumber);
+            await sendDescriptionMessage(contact.phoneNumber);
             contact.step = 'awaitSuport';
             await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
             break;

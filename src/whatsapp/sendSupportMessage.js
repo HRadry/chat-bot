@@ -42,4 +42,4 @@ const sendConfirmationMessage = async (phoneNumber) => {
   console.log(`Confirmation message sent to ${phoneNumber}`);
 };
 
-module.exports = { sendSupportMessage, sendDescriptionMessage, sendConfirmationMessage , sendAddTitleMessage };
+module.exports = { sendDescriptionMessage, sendConfirmationMessage , sendAddTitleMessage };

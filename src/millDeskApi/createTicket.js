@@ -10,6 +10,7 @@ const createTicket = async (contact) => {
   Informações do Contato:
   Nome: ${contact.name}
   Número de Telefone: ${contact.phoneNumber}
+  local: ${contact.location}
   Responsável: ${contact.responsavel}
   Contato Responsável: ${contact.contato_responsavel}`;
 
