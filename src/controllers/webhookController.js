@@ -19,7 +19,7 @@ const handleWebhook = async (req, res, next) => {
   if (type === 'message') {
     const { contact, text } = req.processedData;
 
-    console.log('Received message:', { contact, text });
+    console.log('Received message:', {text});
 
     try {
       switch (contact.step) {
@@ -61,6 +61,7 @@ const handleWebhook = async (req, res, next) => {
 
           case 'awaitContact':
             if (validatePhoneNumber(text)) {
+              contact.conto_Responsavel = (text);
               await sendDescriptionMessage(contact.phoneNumber);
               contact.step = 'awaitSuport';
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
@@ -71,11 +72,11 @@ const handleWebhook = async (req, res, next) => {
             break;
 
           case 'awaitSuport':
-            contact.description = text;
+            contact.description = (text);
             await sendConfirmationMessage (contact.phoneNumber);
             contact.step = 'completed';
+            console.log ('Contato', contact);
             await createTicket(contact);
-            console.log ('Contato', contact)
             //TODO: Enviar as informações coletadas para a Base de dados
             await redis.del(contact.whatsappId);
             
