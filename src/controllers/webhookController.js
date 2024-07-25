@@ -21,7 +21,7 @@ const handleWebhook = async (req, res, next) => {
     try {
       switch (contact.step) {
         case '':  // Se o step estiver vazio, inicia a conversa com a saudação
-          await sendGreetingMessage(contact.phoneNumber);
+          await sendGreetingMessage(contact);
           await new Promise(resolve => setTimeout(resolve, 1000)); //atraso de 1 segundo para sincornizar mensagens.
           await sendEmailMessage(contact.phoneNumber);
           contact.step = 'awaitEMAIL';  // Define o próximo passo
