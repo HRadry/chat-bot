@@ -4,7 +4,9 @@ const { createTicket } = require('../millDeskApi/createTicket'); // Importe a fu
 const { validateEmail, emailExists } = require('../millDeskApi/validationEmail');
 const sendGreetingMessage = require('../whatsapp/sendGreetingMessage');
 const { sendEmailMessage , sendInvalidEmailMessage } = require('../whatsapp/sendEmailMessage');
-const {sendSupportMessage, sendConfirmationMessage, sendDescriptionMessage} = require('../whatsapp/sendSupportMessage');
+const {sendConfirmationMessage, sendDescriptionMessage} = require('../whatsapp/sendSupportMessage');
+const { sendResponsibleNameMessage, sendResponsibleContactMessage , sendInvalidPhoneNumberMessage} = require('../whatsapp/sendContactMessage');
+
 //const { sendCNPJMessage,sendInvalidCNPJMessage } = require('../whatsapp/sendCNPJMessage');
 //const { validateCNPJ} = require('../utils/validationUtils'); // Verifique o caminho
 
@@ -20,12 +22,11 @@ const handleWebhook = async (req, res, next) => {
 
     try {
       switch (contact.step) {
-        case '':  // Se o step estiver vazio, inicia a conversa com a saudação
+        case '':
           await sendGreetingMessage(contact);
-          await new Promise(resolve => setTimeout(resolve, 1000)); //atraso de 1 segundo para sincornizar mensagens.
+          await new Promise(resolve => setTimeout(resolve, 1000));
           await sendEmailMessage(contact.phoneNumber);
           contact.step = 'awaitEMAIL';  // Define o próximo passo
-          console.log('meu step agora é:', contact)
           await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX' ,SUPPORT_EXPIRATION)
           break;
 
@@ -33,35 +34,54 @@ const handleWebhook = async (req, res, next) => {
             if (validateEmail(text)) {
               contact.email = text;
               await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
-              console.log('Email is valid:', contact.email);
-              // Verifica se o e-mail existe na lista de solicitantes
               const emailRegistered = await emailExists(text);
               if (emailRegistered) {
-                console.log('E-mail registrado encontrado na lista.');
                 contact.email = text;
-                await sendSupportMessage(contact.phoneNumber);
-                await sendDescriptionMessage(contact.phoneNumber);
-                contact.step = 'awaitSuport';
+                await sendResponsibleNameMessage(contact.phoneNumber);
+                contact.step = 'awaitResponsible';
                 await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
               } else {
-                console.log('E-mail não registrado encontrado na lista.');
                 // TODO: Definir lógica para tratamento de clientes com e-mail não cadastrado
-                contact.step = 'awaitEMAIL'; // Solicitar novamente o e-mail
+                contact.step = 'awaitEMAIL';
               }
             } else {
               console.log('Invalid email:', text);
               await sendInvalidEmailMessage(contact.phoneNumber);
-              contact.step = 'awaitEMAIL'; // Solicitar novamente o e-mail
+              contact.step = 'awaitEMAIL';
             }
             break;
+          
+          case 'awaitResponsible':
+            contact.responsavel = (text);
+            await sendResponsibleContactMessage(contact.phoneNumber);
+            contact.step = 'awaitContact';
+            await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
+            break;
+          
+            const { validatePhoneNumber } = require('./phoneNumberValidation');
+
+          case 'awaitContact':
+            if (validatePhoneNumber(text)) {
+              const formattedPhoneNumber = formatPhoneNumber(text);
+              contact.contato_responsavel = formattedPhoneNumber;
+              await sendDescriptionMessage(contact.phoneNumber);
+              contact.step = 'awaitSuport';
+              await redis.set(contact.whatsappId, JSON.stringify(contact), 'EX', SUPPORT_EXPIRATION);
+            } else {
+                await sendInvalidPhoneNumberMessage(contact.phoneNumber);
+                contact.step = 'awaitContact'; // Solicitar novamente o número de telefone
+            }
+            break;
+
           case 'awaitSuport':
             contact.description = text;
-            console.log ('Descrição do problema', contact.description);
             await sendConfirmationMessage (contact.phoneNumber);
             contact.step = 'completed';
             await createTicket(contact);
+            console.log ('Contato', contact)
             //TODO: Enviar as informações coletadas para a Base de dados
-            await redis.del(contact.whatsappId)
+            await redis.del(contact.whatsappId);
+            
         }
 
     } catch (error) {

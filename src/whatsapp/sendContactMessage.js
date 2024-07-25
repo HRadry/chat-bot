@@ -28,4 +28,19 @@ const sendResponsibleContactMessage = async (phoneNumber) => {
   console.log(`Responsible contact message sent to ${phoneNumber}`);
 };
 
-module.exports = { sendResponsibleNameMessage, sendResponsibleContactMessage };
+// Mensagem para Numero invalido de telefone.. 
+const sendInvalidPhoneNumberMessage = async (phoneNumber) => {
+  const messageData = {
+    messaging_product: 'whatsapp',
+    type: 'text',
+    text: {
+      body: `🚫 Ops, parece que o telefone que você enviou não está correto. Pode dar uma conferida e me enviar um número completinho, com o DDD e sem espaços ou caracteres especiais? Exemplo: 11987654321. Assim, conseguimos continuar com o atendimento sem problemas! 😊✨`
+    }
+  };
+
+  await sendMessage(phoneNumber, messageData);
+  console.log(`Invalid phone number message sent to ${phoneNumber}`);
+};
+
+
+module.exports = { sendResponsibleNameMessage, sendResponsibleContactMessage, sendInvalidPhoneNumberMessage};
