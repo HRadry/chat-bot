@@ -1,59 +1,18 @@
-webhook-serve-Railway
-│
-├── src/
-│   ├── app.js
-│   ├── redisClient.js
-│   ├── assets
-│   │   ├── istockphoto-460743571-1024x1024.jpg
-│   ├── controllers/
-│   │   ├── webhookController.js
-│   │   └── verificationController.js
-│   ├── middleware/
-│   │   ├── messageProcessor.js
-│   │   ├── statusProcessor.js
-│   ├── millDeskApi
-│   │   └──createTicket.js
-│   ├── routes/
-│   │   └── webhookRoutes.js
-│   ├── utils/
-│   │   └── phoneUtils.js
-│   │   └──messageSender.js
-│   │   └── processWebhookData.js
-│   │   ├── ValidantionUtils.js
-│   └── Whatsapp/
-│   │   ├──sendExitMessage.js
-│   │   ├──sedConfirmationMessage.js
-│   │   ├──sendDescripitionMessage.js
-│   │   ├──sendGreetingMessage.js
-│   │   ├──sendMenuPrincipal.js
-│   │   ├──sendSalesMessage.js
-│   │   ├──sendSupportMessage.js
-│   │   ├──sendCNPJMessage
-│   │   ├──sendEmailMessage
-│   │   ├──
-├── .gitignore
-├── .env
-├── package.json
+WhatsApp Chatbot - Milldesk Support
+Descrição
+Este projeto é um chatbot para WhatsApp conectado à API Meta, projetado para oferecer suporte e abertura de tickets na plataforma de suporte Milldesk. O chatbot é implementado utilizando Node.js, Redis para persistência de dados, e a biblioteca Jscommon. O servidor é construído sobre Express e está hospedado na plataforma Railway.
 
-
-
-
-
-
-        case 'awaitCNPJ':
-          if (validateCNPJ(text)) {
-            contact.cnpj = text;
-            console.log('CNPJ is valid:', contact.cnpj);
-            await sendSupportMessage (contact.phoneNumber);
-            await sendDescriptionMessage (contact.phoneNumber);
-            contact.step = 'awaitSuport';
-            await redis.set(contact.whatsappId, JSON.stringify(contact),'EX', SUPPORT_EXPIRATION);
-          } else {
-            console.log('Invalid CNPJ:', text);
-            await sendInvalidCNPJMessage(contact.phoneNumber);
-            contact.step = 'awaitCNPJ';
-          }
-          break;
-
-
-
+Estrutura do Projeto
+/src: Contém o código-fonte principal.
+/controllers: Contém os controladores que gerenciam a lógica do chatbot.
+/middleware: Contém middleware personalizado, como logging e verificação de tokens.
+/routes: Contém as definições de rotas do servidor Express.
+/services: Contém serviços para integração com a API Meta e Milldesk.
+/utils: Contém funções utilitárias e helpers, como formatação de números de telefone.
+/redis: Implementa a persistência de dados utilizando Redis.
+app.js: Arquivo principal para configuração do servidor Express.
+Requisitos
+Node.js: Versão 16.x ou superior
+Redis: Para persistência de dados
+Railway: Para hospedagem do servidor
+Jscommon: Biblioteca para funcionalidades comuns e reutilizáveis
