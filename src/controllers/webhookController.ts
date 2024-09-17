@@ -21,6 +21,7 @@ import { LogService } from '../modulos/resgistros/services/logs.service';
 const blackListService = new BlackListService();
 
 export const handleWebhook = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  console.log("entro a handler")
 
   const { type, text } = req.body;
 
@@ -28,52 +29,20 @@ export const handleWebhook = async (req: Request, res: Response, next: NextFunct
     const { contact: { phoneNumber }, text } = req.body;
 
     try {
+
+      sendMenuMessage(phoneNumber);
       // Flujo Tranferencia
 
       // - Validar si el número que habla no está en lista negra sendErrorBlackListMessage(phoneNumber)
 
-      const isBlackListed = await blackListService.findByPartyIdentifierAndStatus(phoneNumber, 'blocked');
+      //const isBlackListed = await blackListService.findByPartyIdentifierAndStatus(phoneNumber, 'blocked');
 
-      if (isBlackListed) await sendErrorBlackListMessage(phoneNumber);
+      //if (isBlackListed) await sendErrorBlackListMessage(phoneNumber);
 
 
       // - Validar si el número que habla existe en la base de datos (lookUpClient) 
       // - Errores:
       //    * Siel numero no tiene una cuenta asiociada sendErrorAccountPayeMessage(phoneNumber)
-
-      try {
-
-        const lookupResponse = await lookUpClient.get<PartyInfoDfsp>('/get_info', {
-          params: {
-            partyIdType: 'MSISDN',
-            partyIdentifier: phoneNumber
-          }
-        });
-
-      } catch (error) {
-        //const sessionId = await sessionService.CrearSimple(phoneNumberOrigin, originUserName);
-        // => await LogService.CrearLog(startTime, 'buscar cuenta', error, sessionId, 'ConsultarSession', 'ERROR');
-
-        console.log('error::::::',  error)
-        // const errorCode = Error.response.data.code;
-        // let errorMessage;
-
-        // switch (errorCode) {
-        //   case '1000':
-        //     errorMessage = '⚠️ Tenemos problemas de comunicación al encontrar tu cuenta, por favor intenta más tarde.';
-        //     break;
-        //   case '3204':
-        //     errorMessage = `🚩 El número de teléfono ${phoneNumber} no tiene una cuenta asociada.\n\n🔗 Por favor, regístrate en http://lacamaradelagente.mx`;
-        //     break;
-        //   case '5400':
-        //     errorMessage = `🚫 La cuenta asociada al número de teléfono ${phoneNumber} está bloqueada o inactiva. Por favor, contacta a soporte.`;
-        //     break;
-        //   default:
-        //     errorMessage = '❌ Ocurrió un error inesperado. Por favor, intenta más tarde.';
-        //     break;
-        // }
-      }
-
 
       // - Validar si tiene sesión activa sí: no enviar código no: enviar código
 
@@ -118,29 +87,8 @@ export const handleWebhook = async (req: Request, res: Response, next: NextFunct
 
       // - Mensaje final sendEndMessage(phoneNumber)
 
-      console.log('Contact:', req.body);
-      await sendValidationMessage(phoneNumber);
-      await sendGuideMessage(phoneNumber);
-    } catch (error) {
-      console.error('Error handling webhook:', error);
-    }
-  } else if (type === 'status') {
-    const { id, status } = req.body;
-    console.log(`Message ID: ${id}, Status: ${status}`);
-  }
-
-  if (type === 'message' && text === '4') {
-    const { contact: { phoneNumber }, text } = req.body;
-
-    try {
-      await sendLocationMessage(phoneNumber);
-      await sendMenuMessage(phoneNumber);
-      await sendPhonePayeeMessage(phoneNumber);
-      await sendAmountMessage(phoneNumber);
-      await sendSummaryMessage(phoneNumber);
-      await sendAuthMessage(phoneNumber);
-      await sendReceiptMessage(phoneNumber);
-      await sendErrorAccountPayerMessage(phoneNumber)
+      
+      
     } catch (error) {
       console.error('Error handling webhook:', error);
     }

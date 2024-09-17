@@ -14,13 +14,13 @@ export abstract class BaseEntity {
     name: "created_at",
     type: "timestamp",
   })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({
     name: "updated_at",
     type: "timestamp",
   })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   constructor(id: string) {
     this.id = id;
