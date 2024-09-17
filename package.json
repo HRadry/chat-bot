@@ -1,7 +1,7 @@
 {
   "name": "webhook",
   "version": "1.0.0",
-  "description": "Servidor teste WebHook Whatsapp",
+  "description": "WebHook Whatsapp",
   "main": "src/app.ts",
   "scripts": {
     "start": "ts-node src/app.ts",

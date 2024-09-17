@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { setProcessedData } from '../utils/processWebhookData';
 import { formatPhoneNumber } from '../utils/phoneUtils';
-//import redis from '../redisClient';
+
 
 // Definición de la interfaz para los datos de contacto
 interface Contact {
@@ -45,8 +45,7 @@ const messageProcessor = async (req: Request, res: Response, next: NextFunction)
       
       let contact: Contact | null = null;
 
-      //let contact = JSON.parse(await redis.get(whatsappId));
-      //if (!contact) {
+     
         console.log('En contact::: ', formattedPhoneNumber);
         contact = {
           name: name || '',
@@ -54,12 +53,7 @@ const messageProcessor = async (req: Request, res: Response, next: NextFunction)
           whatsappId: whatsappId || '',
           step: ''
         };
-        //redis.set(whatsappId, JSON.stringify(contact));
-        //console.log('Criando atendimento');
-      //}
-      //else {
-        //console.log('Atendimento existente');
-      //}
+       
         console.log('message.type::',message)
       if (message.type === 'text') {
         setProcessedData(req, {

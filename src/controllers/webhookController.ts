@@ -21,7 +21,6 @@ import { LogService } from '../modulos/resgistros/services/logs.service';
 const blackListService = new BlackListService();
 
 export const handleWebhook = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  console.log("entro a handler")
 
   const { type, text } = req.body;
 

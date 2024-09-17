@@ -1,18 +1,12 @@
-/**
- * Valida um CNPJ.
- * @param cnpj - O CNPJ a ser validado.
- * @returns Retorna verdadeiro se o CNPJ for válido, caso contrário, falso.
- */
+
 export function validateCNPJ(cnpj: string): boolean {
   cnpj = cnpj.replace(/[^\d]+/g, '');
 
   if (cnpj === '') return false;
   if (cnpj.length !== 14) return false;
 
-  // Elimina CNPJs conhecidos como inválidos
   if (/^(\d)\1+$/.test(cnpj)) return false;
 
-  // Valida DVs
   let tamanho = cnpj.length - 2;
   let numeros = cnpj.substring(0, tamanho);
   let digitos = cnpj.substring(tamanho);

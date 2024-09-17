@@ -1,13 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { setProcessedData } from '../utils/processWebhookData';
 
-// Definición de la interfaz para los datos del estado
-interface StatusData {
-  id: string;
-  status: string;
-  timestamp: string;
-}
-
 const statusProcessor = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const entry = req.body.entry && req.body.entry[0];

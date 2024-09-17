@@ -1,6 +1,6 @@
 import sendMessage from '../utils/messageSender';
 
-// Función para enviar mensaje de error de código
+// Función para enviar mensaje de ingreso a la blacklist
 export const sendErrorAuthMessage = async (phoneNumber: string): Promise<void> => {
 
   const messageData = {
@@ -32,7 +32,7 @@ export const sendErrorAttempsMessage = async (phoneNumber: string): Promise<void
   console.log(`Error message sent to ${phoneNumber}`);
 };
 
-// Función para enviar mensaje de intentos restantes
+// Función para enviar mensaje de error en lookup
 export const sendErrorLookupMessage = async (phoneNumber: string): Promise<void> => {
 
   const messageData = {
@@ -66,7 +66,7 @@ export const sendErrorAccountMessage = async (phoneNumber: string): Promise<void
 };
 
 
-// Función para enviar mensaje de lista negra de payer
+// Función para enviar mensaje de party está lista negra
 export const sendErrorBlackListMessage = async (phoneNumber: string): Promise<void> => {
 
   const messageData = {
@@ -179,7 +179,7 @@ export const sendErrorFundsMessage = async (phoneNumber: string): Promise<void> 
   console.log(`Error message sent to ${phoneNumber}`);
 };
 
-// Función para enviar mensaje de fondos insuficientes
+// Función para enviar mensaje de formato de monto
 export const sendErrorFormatAmountMessage = async (phoneNumber: string): Promise<void> => {
 
   const messageData = {

@@ -6,8 +6,6 @@ import statusProcessor from '../middleware/statusProcessor';
 
 const router = express.Router();
 
-console.log("estoy en routes");
-
 // Middleware de procesamiento básico
 router.post('/', messageProcessor, statusProcessor, handleWebhook);
 

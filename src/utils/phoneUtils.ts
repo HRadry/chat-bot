@@ -4,7 +4,6 @@ export function formatPhoneNumber(phoneNumber: string): string {
     if (phoneNumber.startsWith('521') && phoneNumber.length === 13) {
         // Remove the '1' at position 3
         const formatted = phoneNumber.slice(0, 2) + phoneNumber.slice(3);
-        console.log('Formatted phone number:', formatted);
         return formatted;
     } else {
         // If it doesn't meet the condition, return the number as is

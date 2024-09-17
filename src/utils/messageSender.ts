@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-
-
 // Send a message using the WhatsApp API
 const sendMessage = async (phoneNumber: string, messageData: any): Promise<void> => {
   // Prepare the data object for the API request

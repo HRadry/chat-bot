@@ -1,6 +1,6 @@
 import sendMessage from '../utils/messageSender';
 
-// Función para enviar mensaje de esperar
+// Función para enviar mensaje de espera
 export const sendValidationMessage = async (phoneNumber: string): Promise<void> => {
 
     const messageData = {

@@ -16,7 +16,7 @@ export const sendPhonePayeeMessage = async (phoneNumber: string): Promise<void> 
     console.log(`Message sent to ${phoneNumber}`);
 };
 
-
+// Función para enviar mensaje de solicitud de monto
 export const sendAmountMessage = async (phoneNumber: string): Promise<void> => {
     
     const messageData = {
@@ -32,7 +32,7 @@ export const sendAmountMessage = async (phoneNumber: string): Promise<void> => {
     console.log(`Message sent to ${phoneNumber}`);
 };
 
-// Función para enviar mensaje de saludo
+// Función para enviar mensaje de resumen de operación
 export const sendSummaryMessage = async (phoneNumber: string): Promise<void> => {
     
     const messageData = {
@@ -70,7 +70,7 @@ export const sendSummaryMessage = async (phoneNumber: string): Promise<void> => 
     console.log(`Message sent to ${phoneNumber}`);
 };
 
-
+// Función para enviar mensaje de transferencia exitosa
 export const sendReceiptMessage = async (phoneNumber: string): Promise<void> => {
     
     const messageData = {

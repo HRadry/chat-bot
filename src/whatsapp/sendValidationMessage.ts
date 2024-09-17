@@ -1,6 +1,6 @@
 import sendMessage from '../utils/messageSender';
 
-// Función para enviar mensaje de solicitud de código para autenticación
+// Función para enviar mensaje de solicitud de código de verificación
 export const sendValidationMessage = async (phoneNumber: string): Promise<void> => {
 
     const messageData = {
